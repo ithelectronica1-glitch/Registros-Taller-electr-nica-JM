@@ -26,8 +26,12 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 .card-custom{border-radius:12px;border:1px solid var(--border-color);box-shadow:0 2px 8px rgba(0,0,0,.04);background:#fff}
 .table-responsive{border-radius:8px}
 .table th{background:#f8f9fa;color:#3c4043;font-weight:600;white-space:nowrap}
-.preview-thumb{width:70px;height:70px;object-fit:cover;border-radius:6px;border:1px solid #dadce0}
-.preview-container{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.preview-thumb-wrapper{position:relative;display:inline-block}
+.preview-thumb{width:70px;height:70px;object-fit:cover;border-radius:6px;border:1px solid #dadce0;display:block}
+.preview-thumb-del{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#dc3545;color:#fff;border:2px solid #fff;font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.preview-thumb-del:hover{background:#b02a37}
+.preview-thumb-badge{position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,.65);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px}
+.preview-container{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;min-height:0}
 .badge-role{background:#e8f0fe;color:var(--primary-blue);font-weight:600;border-radius:20px;padding:.35em .75em}
 #loadingSpinner{display:none}
 .action-btns .btn{margin:1px}
@@ -54,6 +58,25 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 .btn-wsp{background:#25D366!important;border-color:#25D366!important;color:#fff!important}
 .btn-wsp:hover{background:#1da851!important;border-color:#1da851!important}
 .admin-note{background:#fff3cd;border-left:4px solid #ffc107;padding:.5rem .75rem;border-radius:6px;font-size:.82rem;color:#856404}
+
+/* === ESTILOS DE LA CAMARA === */
+#videoCamara{
+  width:100%;max-height:60vh;background:#000;border-radius:10px;object-fit:contain;
+}
+.camara-info-badge{
+  position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);color:#fff;
+  padding:4px 10px;border-radius:20px;font-size:.78rem;font-weight:600;
+}
+.camara-info-badge.rec::before{
+  content:'●';color:#ff3b30;margin-right:5px;animation:blink 1s infinite;
+}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:.3}}
+#camaraContainer{position:relative;background:#000;border-radius:10px;overflow:hidden;min-height:200px;display:flex;align-items:center;justify-content:center}
+#camaraError{padding:2rem;text-align:center;color:#fff}
+.foto-counter{
+  background:#e8f0fe;color:var(--primary-blue);padding:3px 10px;border-radius:20px;
+  font-size:.78rem;font-weight:600;display:inline-block;margin-left:8px;
+}
 </style>
 </head>
 <body>
@@ -289,13 +312,42 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
             <label for="formTecnico" class="form-label fw-semibold">Docente/Técnico Responsable *</label>
             <input type="text" id="formTecnico" class="form-control" placeholder="Nombre del docente o técnico" required>
           </div>
-          <div class="col-12 col-md-6">
-            <label for="formFotos" class="form-label fw-semibold">Fotografías (1 a 4) *</label>
-            <input type="file" id="formFotos" class="form-control" accept="image/*" multiple
-                   onchange="validarYPrevisualizarFotos(this)">
-            <div class="form-text small">Máx. 2 MB por foto. Se enviarán al cliente por SMS/WhatsApp.</div>
+
+          <!-- ============================================== -->
+          <!-- SECCION DE FOTOGRAFIAS CON CAMARA INTEGRADA    -->
+          <!-- ============================================== -->
+          <div class="col-12">
+            <label class="form-label fw-semibold">
+              Fotografías del Aparato *
+              <span class="foto-counter" id="fotoCounter">0 / 4</span>
+            </label>
+
+            <div class="row g-2">
+              <div class="col-12 col-md-6">
+                <label for="formFotos" class="form-label small text-muted mb-1">
+                  <i class="fa-solid fa-paperclip me-1"></i>Adjuntar imágenes
+                </label>
+                <input type="file" id="formFotos" class="form-control form-control-sm"
+                       accept="image/*" multiple onchange="validarYPrevisualizarFotos(this)">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small text-muted mb-1">
+                  <i class="fa-solid fa-camera me-1"></i>O tomar foto en el momento
+                </label>
+                <button type="button" id="btnAbrirCamara" class="btn btn-action btn-sm w-100"
+                        onclick="abrirCamara()">
+                  <i class="fa-solid fa-camera me-1"></i>Tomar Foto
+                </button>
+              </div>
+            </div>
+
+            <div class="form-text small mt-2">
+              Máximo 4 fotos en total. Máx. 2 MB por foto. Puede combinar archivos adjuntos y fotos de cámara.
+            </div>
+            <div id="previewFotosContainer" class="preview-container"></div>
           </div>
-          <div class="col-12"><div id="previewFotosContainer" class="preview-container"></div></div>
+          <!-- ============================================== -->
+
           <div class="col-12">
             <label for="formFallaInicial" class="form-label fw-semibold">Diagnóstico o Falla Inicial *</label>
             <textarea id="formFallaInicial" class="form-control" rows="2"
@@ -324,6 +376,57 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
         <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
         <button type="button" id="btnGuardarEquipo" class="btn btn-action px-4" onclick="guardarFormularioEquipo()">
           <i class="fa-solid fa-floppy-disk me-2"></i>Guardar Registro
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- MODAL CAMARA                                   -->
+<!-- ============================================== -->
+<div class="modal fade" id="modalCamara" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title fw-bold">
+          <i class="fa-solid fa-camera me-2"></i>Tomar Fotografía
+        </h5>
+        <button type="button" class="btn-close btn-close-white" onclick="cerrarCamara()"></button>
+      </div>
+      <div class="modal-body p-2">
+
+        <div id="camaraContainer">
+          <span class="camara-info-badge rec" id="camaraInfoBadge">EN VIVO</span>
+          <video id="videoCamara" autoplay playsinline muted></video>
+          <div id="camaraError" class="d-none">
+            <i class="fa-solid fa-video-slash fa-3x mb-3"></i>
+            <h6 class="fw-bold">No se pudo acceder a la cámara</h6>
+            <p class="small mb-0" id="camaraErrorMsg">
+              Verifique los permisos de cámara en su navegador.
+            </p>
+          </div>
+          <canvas id="canvasCamara" class="d-none"></canvas>
+        </div>
+
+        <div class="text-center mt-3">
+          <button type="button" id="btnAlternarCamara" class="btn btn-outline-light btn-sm d-none"
+                  onclick="alternarCamara()" title="Cambiar cámara frontal/trasera">
+            <i class="fa-solid fa-camera-rotate me-1"></i>Cambiar cámara
+          </button>
+        </div>
+
+        <div class="text-center text-muted small mt-2">
+          Presione <strong>Capturar</strong> cuando la imagen esté lista.
+          <br>Fotos capturadas: <strong id="fotosCapturadasContador">0</strong> / 4
+        </div>
+      </div>
+      <div class="modal-footer bg-light d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary rounded-pill" onclick="cerrarCamara()">
+          <i class="fa-solid fa-xmark me-1"></i>Cerrar
+        </button>
+        <button type="button" id="btnCapturar" class="btn btn-action px-4" onclick="capturarFoto()">
+          <i class="fa-solid fa-camera-retro me-2"></i>Capturar
         </button>
       </div>
     </div>
@@ -468,7 +571,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 /* ============================================================
-   CONFIGURACION - URL DE APPS SCRIPT (ACTUALIZADA)
+   CONFIGURACION - URL DE APPS SCRIPT
    ============================================================ */
 const API_URL = 'https://script.google.com/macros/s/AKfycbzeL0YGAxOEqQmWMpCSdZiSFo_cZQn1_4ZvhWKq3E53eIBMPy9ICwioFsHaMLO_naxAkw/exec';
 
@@ -482,7 +585,12 @@ let fotosBase64Cargadas = [];
 let registroSeleccionadoParaInforme = null;
 let guardandoRegistro = false;
 
-let bsModalRegistro, bsModalUsuarios, bsModalFotos, bsModalInforme, bsModalCambiarPass;
+// Estado de la cámara
+let camaraStream = null;
+let camaraFacingMode = 'environment'; // 'environment' = trasera, 'user' = frontal
+let camaraActiva = false;
+
+let bsModalRegistro, bsModalUsuarios, bsModalFotos, bsModalInforme, bsModalCambiarPass, bsModalCamara;
 
 /* ============================================================
    CONSTANTES DE HONDURAS
@@ -544,7 +652,6 @@ function fechaLocalHoy() {
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
-/* Convierte URL de Drive thumbnail a URL de vista directa */
 function convertirUrlDriveAView(url) {
   const m = String(url).match(/[?&]id=([^&]+)/);
   if (m) return 'https://drive.google.com/file/d/' + m[1] + '/view';
@@ -594,6 +701,353 @@ function toggleOtroAparato() {
 }
 
 /* ============================================================
+   PREVISUALIZACION DE FOTOS (adjuntas + camara)
+   ============================================================ */
+function actualizarPreviewFotos() {
+  const cont = document.getElementById('previewFotosContainer');
+  cont.innerHTML = '';
+
+  fotosBase64Cargadas.forEach(function (foto, index) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'preview-thumb-wrapper';
+
+    const img = document.createElement('img');
+    img.src = foto.data;
+    img.className = 'preview-thumb';
+    img.title = foto.name;
+    wrapper.appendChild(img);
+
+    // Etiqueta de origen
+    if (foto.origen === 'camara') {
+      const badge = document.createElement('span');
+      badge.className = 'preview-thumb-badge';
+      badge.innerHTML = '<i class="fa-solid fa-camera"></i>';
+      wrapper.appendChild(badge);
+    }
+
+    // Botón eliminar
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'preview-thumb-del';
+    del.innerHTML = '&times;';
+    del.title = 'Eliminar esta foto';
+    del.onclick = function () { eliminarFoto(index); };
+    wrapper.appendChild(del);
+
+    cont.appendChild(wrapper);
+  });
+
+  // Actualizar contador
+  const counter = document.getElementById('fotoCounter');
+  counter.textContent = fotosBase64Cargadas.length + ' / 4';
+
+  // Actualizar contador dentro del modal de cámara
+  const camCont = document.getElementById('fotosCapturadasContador');
+  if (camCont) camCont.textContent = fotosBase64Cargadas.length;
+
+  // Habilitar/deshabilitar botón de tomar foto
+  const btnAbrir = document.getElementById('btnAbrirCamara');
+  if (btnAbrir) {
+    if (fotosBase64Cargadas.length >= 4) {
+      btnAbrir.disabled = true;
+      btnAbrir.title = 'Ya alcanzó el máximo de 4 fotos';
+    } else {
+      btnAbrir.disabled = false;
+      btnAbrir.title = '';
+    }
+  }
+}
+
+function eliminarFoto(index) {
+  if (index < 0 || index >= fotosBase64Cargadas.length) return;
+  fotosBase64Cargadas.splice(index, 1);
+  actualizarPreviewFotos();
+  log('Foto eliminada. Total:', fotosBase64Cargadas.length);
+}
+
+/* Validación de fotos desde input file */
+function validarYPrevisualizarFotos(input) {
+  const files = Array.from(input.files);
+  if (files.length === 0) return;
+
+  const disponibles = 4 - fotosBase64Cargadas.length;
+  if (disponibles <= 0) {
+    alert('Ya alcanzó el máximo de 4 fotografías. Elimine alguna para agregar más.');
+    input.value = '';
+    return;
+  }
+  if (files.length > disponibles) {
+    alert('Solo puede agregar ' + disponibles + ' foto(s) más (máximo 4 en total). Se agregarán las primeras ' + disponibles + '.');
+  }
+
+  const MAX_BYTES = 2 * 1024 * 1024;
+  let agregadas = 0;
+  const limite = Math.min(files.length, disponibles);
+
+  for (let i = 0; i < limite; i++) {
+    const file = files[i];
+    if (!file.type.startsWith('image/')) {
+      alert('No es imagen: ' + file.name);
+      continue;
+    }
+    if (file.size > MAX_BYTES) {
+      alert('"' + file.name + '" supera los 2 MB.');
+      continue;
+    }
+
+    // Leer el archivo de forma sincrónica al final para contar bien
+    const reader = new FileReader();
+    reader.onload = (function (fname) {
+      return function (ev) {
+        fotosBase64Cargadas.push({
+          data: ev.target.result,
+          name: fname,
+          origen: 'archivo'
+        });
+        actualizarPreviewFotos();
+        log('Foto adjunta:', fname);
+      };
+    })(file.name);
+    reader.readAsDataURL(file);
+    agregadas++;
+  }
+
+  // Limpiar el input para poder subir la misma foto de nuevo si se elimina
+  setTimeout(function () { input.value = ''; }, 300);
+
+  if (agregadas === 0 && files.length > 0) {
+    log('Ninguna foto fue agregada');
+  }
+}
+
+/* ============================================================
+   CAMARA - ABRIR / CERRAR / CAPTURAR
+   ============================================================ */
+
+/** Verifica si el navegador soporta getUserMedia */
+function soportaCamara() {
+  return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+
+/** Abre el modal de la cámara y comienza el streaming */
+async function abrirCamara() {
+  if (fotosBase64Cargadas.length >= 4) {
+    alert('Ya alcanzó el máximo de 4 fotografías.');
+    return;
+  }
+
+  if (!soportaCamara()) {
+    alert('Este navegador no soporta el acceso a la cámara.\n\n' +
+          'Sugerencias:\n' +
+          '• Use Chrome, Edge, Safari o Firefox actualizado\n' +
+          '• Asegúrese de estar en HTTPS (GitHub Pages lo cumple)\n' +
+          '• En iOS use Safari (no todos los navegadores soportan cámara)');
+    return;
+  }
+
+  // Mostrar el modal primero
+  bsModalCamara.show();
+
+  // Resetear UI
+  const video = document.getElementById('videoCamara');
+  const errorDiv = document.getElementById('camaraError');
+  const badge = document.getElementById('camaraInfoBadge');
+  const btnAlternar = document.getElementById('btnAlternarCamara');
+
+  video.classList.remove('d-none');
+  errorDiv.classList.add('d-none');
+  badge.classList.remove('d-none');
+
+  // Iniciar la cámara
+  await iniciarCamara();
+
+  // Mostrar botón de alternar si hay más de una cámara
+  if (camaraActiva) {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const camaras = devices.filter(d => d.kind === 'videoinput');
+    if (camaras.length > 1) {
+      btnAlternar.classList.remove('d-none');
+    } else {
+      btnAlternar.classList.add('d-none');
+    }
+  }
+
+  // Actualizar contador de fotos capturadas
+  document.getElementById('fotosCapturadasContador').textContent = fotosBase64Cargadas.length;
+}
+
+/** Inicia o reinicia el streaming de la cámara */
+async function iniciarCamara() {
+  const video = document.getElementById('videoCamara');
+
+  // Detener cualquier stream previo
+  if (camaraStream) {
+    camaraStream.getTracks().forEach(t => t.stop());
+    camaraStream = null;
+  }
+
+  try {
+    const constraints = {
+      video: {
+        facingMode: { ideal: camaraFacingMode },
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      },
+      audio: false
+    };
+
+    camaraStream = await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject = camaraStream;
+
+    // Esperar a que el video esté listo
+    await new Promise(function (resolve) {
+      video.onloadedmetadata = function () {
+        video.play().catch(function () {});
+        resolve();
+      };
+    });
+
+    camaraActiva = true;
+    log('Cámara iniciada. facingMode:', camaraFacingMode);
+
+  } catch (err) {
+    logError('Error al iniciar cámara:', err);
+    camaraActiva = false;
+    mostrarErrorCamara(err);
+  }
+}
+
+/** Muestra un mensaje de error si la cámara no está disponible */
+function mostrarErrorCamara(err) {
+  const video = document.getElementById('videoCamara');
+  const errorDiv = document.getElementById('camaraError');
+  const badge = document.getElementById('camaraInfoBadge');
+  const btnAlternar = document.getElementById('btnAlternarCamara');
+
+  video.classList.add('d-none');
+  badge.classList.add('d-none');
+  btnAlternar.classList.add('d-none');
+  errorDiv.classList.remove('d-none');
+
+  let msg = 'Verifique los permisos de cámara en su navegador.';
+  if (err) {
+    if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+      msg = 'El usuario denegó el permiso de cámara. Habilítelo en la barra de direcciones (candado) y vuelva a intentarlo.';
+    } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+      msg = 'No se encontró ninguna cámara en este dispositivo.';
+    } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+      msg = 'La cámara está siendo usada por otra aplicación. Ciérrela e inténtelo de nuevo.';
+    } else if (err.name === 'OverconstrainedError') {
+      msg = 'Las restricciones solicitadas no coinciden con ninguna cámara disponible.';
+    } else if (err.message) {
+      msg = err.message;
+    }
+  }
+  document.getElementById('camaraErrorMsg').textContent = msg;
+}
+
+/** Alterna entre cámara frontal y trasera */
+async function alternarCamara() {
+  camaraFacingMode = (camaraFacingMode === 'environment') ? 'user' : 'environment';
+  log('Alternando cámara a:', camaraFacingMode);
+  await iniciarCamara();
+}
+
+/** Captura la foto del video y la agrega a la lista */
+function capturarFoto() {
+  if (!camaraActiva) {
+    alert('La cámara no está activa.');
+    return;
+  }
+
+  if (fotosBase64Cargadas.length >= 4) {
+    alert('Ya alcanzó el máximo de 4 fotografías.');
+    cerrarCamara();
+    return;
+  }
+
+  const video = document.getElementById('videoCamara');
+  const canvas = document.getElementById('canvasCamara');
+
+  // Dimensiones reales del video
+  const w = video.videoWidth || 1280;
+  const h = video.videoHeight || 720;
+
+  canvas.width = w;
+  canvas.height = h;
+
+  const ctx = canvas.getContext('2d');
+
+  // Espejar si es cámara frontal (para que se vea natural)
+  if (camaraFacingMode === 'user') {
+    ctx.translate(w, 0);
+    ctx.scale(-1, 1);
+  }
+
+  ctx.drawImage(video, 0, 0, w, h);
+
+  // Convertir a base64 JPEG con calidad 0.85
+  let dataUrl;
+  try {
+    dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  } catch (e) {
+    logError('Error al convertir canvas a imagen:', e);
+    alert('No se pudo procesar la imagen. Intente de nuevo.');
+    return;
+  }
+
+  // Verificar peso aproximado (base64 ≈ 1.37x bytes reales)
+  const pesoAprox = (dataUrl.length * 0.75) / 1024 / 1024; // MB
+  if (pesoAprox > 2.5) {
+    alert('La foto pesa aproximadamente ' + pesoAprox.toFixed(2) + ' MB, mayor al límite de 2 MB. Acérquese al equipo para reducir el tamaño.');
+    return;
+  }
+
+  const nombre = 'camara_' + Date.now() + '.jpg';
+
+  fotosBase64Cargadas.push({
+    data: dataUrl,
+    name: nombre,
+    origen: 'camara'
+  });
+
+  actualizarPreviewFotos();
+
+  // Animación de captura (flash blanco)
+  const container = document.getElementById('camaraContainer');
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:absolute;inset:0;background:#fff;opacity:.9;transition:opacity .3s;pointer-events:none;';
+  container.appendChild(flash);
+  setTimeout(function () { flash.style.opacity = '0'; }, 30);
+  setTimeout(function () { if (flash.parentNode) flash.parentNode.removeChild(flash); }, 350);
+
+  log('Foto capturada:', nombre, '(' + pesoAprox.toFixed(2) + ' MB aprox)');
+
+  // Si ya llegó a 4, cerrar la cámara automáticamente
+  if (fotosBase64Cargadas.length >= 4) {
+    setTimeout(function () {
+      alert('Ha alcanzado el máximo de 4 fotografías. Se cerrará la cámara.');
+      cerrarCamara();
+    }, 400);
+  }
+}
+
+/** Cierra la cámara y detiene el stream */
+function cerrarCamara() {
+  if (camaraStream) {
+    camaraStream.getTracks().forEach(function (track) { track.stop(); });
+    camaraStream = null;
+  }
+  camaraActiva = false;
+
+  const video = document.getElementById('videoCamara');
+  if (video) video.srcObject = null;
+
+  try { bsModalCamara.hide(); } catch (e) {}
+  log('Cámara cerrada');
+}
+
+/* ============================================================
    INICIALIZACION
    ============================================================ */
 window.addEventListener('load', function () {
@@ -603,6 +1057,18 @@ window.addEventListener('load', function () {
     bsModalFotos       = new bootstrap.Modal(document.getElementById('modalFotosView'));
     bsModalInforme     = new bootstrap.Modal(document.getElementById('modalInforme'));
     bsModalCambiarPass = new bootstrap.Modal(document.getElementById('modalCambiarPass'));
+    bsModalCamara      = new bootstrap.Modal(document.getElementById('modalCamara'), { backdrop: 'static', keyboard: false });
+
+    // Detener la cámara cuando se cierre el modal (por cualquier motivo)
+    document.getElementById('modalCamara').addEventListener('hidden.bs.modal', function () {
+      if (camaraStream) {
+        camaraStream.getTracks().forEach(function (track) { track.stop(); });
+        camaraStream = null;
+        camaraActiva = false;
+        log('Cámara detenida al cerrar el modal');
+      }
+    });
+
     log('App lista. API:', API_URL);
   } catch (e) {
     logError('Error al inicializar modales:', e);
@@ -634,7 +1100,6 @@ function mostrarInterfazPrincipal() {
   document.getElementById('loggedUserName').textContent = usuarioActual.nombre;
   document.getElementById('loggedUserRole').textContent = usuarioActual.rol;
 
-  // SOLO Administrador Principal ve el boton de crear usuarios
   if (usuarioActual.rol === 'Administrador Principal') {
     document.getElementById('btnGestionUsuarios').classList.remove('d-none');
   } else {
@@ -674,6 +1139,11 @@ async function procesarLogin(e) {
 }
 
 function cerrarSesion() {
+  // Detener cámara si está activa
+  if (camaraStream) {
+    camaraStream.getTracks().forEach(function (track) { track.stop(); });
+    camaraStream = null;
+  }
   sessionStorage.removeItem('ITH_JM_SESSION');
   usuarioActual = null;
   document.getElementById('formLogin').reset();
@@ -718,41 +1188,10 @@ function abrirModalRegistro() {
   document.getElementById('formOtroAparato').value = '';
   document.getElementById('formOtroAparato').required = false;
   fotosBase64Cargadas = [];
-  document.getElementById('previewFotosContainer').innerHTML = '';
   document.getElementById('formFotos').value = '';
+  actualizarPreviewFotos();
   guardandoRegistro = false;
   bsModalRegistro.show();
-}
-
-function validarYPrevisualizarFotos(input) {
-  const files = Array.from(input.files);
-  const cont = document.getElementById('previewFotosContainer');
-  cont.innerHTML = '';
-  fotosBase64Cargadas = [];
-
-  if (files.length === 0) return;
-  if (files.length > 4) {
-    alert('Solo se permiten máximo 4 fotografías.');
-    input.value = '';
-    return;
-  }
-
-  const MAX_BYTES = 2 * 1024 * 1024;
-  let aceptadas = 0;
-  files.forEach(function (file) {
-    if (!file.type.startsWith('image/')) { alert('No es imagen: ' + file.name); return; }
-    if (file.size > MAX_BYTES) { alert('"' + file.name + '" supera los 2 MB.'); return; }
-    aceptadas++;
-    const reader = new FileReader();
-    reader.onload = function (ev) {
-      fotosBase64Cargadas.push({ data: ev.target.result, name: file.name });
-      const img = document.createElement('img');
-      img.src = ev.target.result; img.className = 'preview-thumb'; img.title = file.name;
-      cont.appendChild(img);
-    };
-    reader.readAsDataURL(file);
-  });
-  if (aceptadas === 0) input.value = '';
 }
 
 function validarFormularioEquipo() {
@@ -767,7 +1206,6 @@ function validarFormularioEquipo() {
   const tecnico = g('formTecnico');
   const fallaInicial = g('formFallaInicial');
 
-  // Resolver tipo de aparato (si es "Otro", usar texto personalizado)
   let tipoAparato = tipoAparatoSel;
   if (tipoAparatoSel === 'Otro') {
     if (!otroAparato) {
@@ -837,7 +1275,7 @@ async function guardarFormularioEquipo() {
   document.getElementById('formEquipo').reset();
   document.getElementById('equipoId').value = '';
   fotosBase64Cargadas = [];
-  document.getElementById('previewFotosContainer').innerHTML = '';
+  actualizarPreviewFotos();
   document.getElementById('otroAparatoContainer').classList.add('d-none');
   document.getElementById('formOtroAparato').value = '';
 
@@ -958,7 +1396,6 @@ function editarRegistro(id) {
   document.getElementById('formUsuario').value = reg.usuario || '';
   document.getElementById('formFechaIngreso').value = normalizarFecha(reg.fechaIngreso);
 
-  // Logica especial para el dropdown de aparato
   const tipoSelect = document.getElementById('formTipoAparato');
   const otroContainer = document.getElementById('otroAparatoContainer');
   const otroInput = document.getElementById('formOtroAparato');
@@ -990,8 +1427,8 @@ function editarRegistro(id) {
   document.getElementById('formDiagnosticoFinal').value = reg.diagnosticoFinal || '';
 
   fotosBase64Cargadas = [];
-  document.getElementById('previewFotosContainer').innerHTML = '';
   document.getElementById('formFotos').value = '';
+  actualizarPreviewFotos();
   guardandoRegistro = false;
   bsModalRegistro.show();
 }
@@ -1118,7 +1555,6 @@ function notificarCliente(canal) {
   if (tel8.length !== 8) { alert('El registro no tiene un teléfono hondureño válido.'); return; }
   const telInternacional = '+' + HN_CODIGO_PAIS + tel8;
 
-  // Construir bloque de fotos con enlaces de Drive
   let fotosBloque = '';
   if (reg.fotos) {
     const arr = String(reg.fotos).split(',').filter(u => u.trim() !== '');
