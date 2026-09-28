@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de ingresos y egresos de equipos electrónicos – Taller ITH JM</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary-blue:#1A73E8;--primary-blue-hover:#1557b0;--text-color:#202124;--border-color:#dadce0}
+html,body{height:100%}
+body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min-height:100vh;overflow-x:hidden}
+.btn-action,.btn-primary{background:var(--primary-blue)!important;border-color:var(--primary-blue)!important;color:#fff!important;border-radius:8px!important;font-weight:500;padding:.5rem 1.25rem;transition:all .2s}
+.btn-action:hover,.btn-primary:hover{background:var(--primary-blue-hover)!important;border-color:var(--primary-blue-hover)!important;box-shadow:0 2px 6px rgba(26,115,232,.3)}
+.btn-action:disabled,.btn-primary:disabled{opacity:.65;cursor:not-allowed}
+.btn-outline-custom{color:var(--primary-blue);border:1px solid var(--primary-blue);border-radius:8px;background:transparent}
+.btn-outline-custom:hover{background:#f1f7fe;color:var(--primary-blue-hover)}
+.app-header{background:#fff;border-bottom:2px solid #e8eaed;padding:1rem 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.logo-container{width:60px;height:60px;border-radius:12px;background:#f1f3f4;display:flex;align-items:center;justify-content:center;border:1px dashed #bdc1c6;overflow:hidden;flex-shrink:0}
+.logo-container img{width:100%;height:100%;object-fit:cover}
+.credit-text{color:#5f6368;font-size:.78rem;font-style:italic;margin-top:2px}
+.nav-tabs .nav-link{color:#5f6368;font-weight:500;border:none;border-bottom:3px solid transparent;padding:.75rem 1.25rem;border-radius:0;background:transparent}
+.nav-tabs .nav-link.active{color:var(--primary-blue);border-bottom:3px solid var(--primary-blue);background:transparent}
+.nav-tabs .nav-link:hover:not(.active){border-color:transparent;color:var(--primary-blue)}
+.card-custom{border-radius:12px;border:1px solid var(--border-color);box-shadow:0 2px 8px rgba(0,0,0,.04);background:#fff}
+.table-responsive{border-radius:8px}
+.table th{background:#f8f9fa;color:#3c4043;font-weight:600;white-space:nowrap}
+.preview-thumb{width:70px;height:70px;object-fit:cover;border-radius:6px;border:1px solid #dadce0}
+.preview-container{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.badge-role{background:#e8f0fe;color:var(--primary-blue);font-weight:600;border-radius:20px;padding:.35em .75em}
+#loadingSpinner{display:none}
+.action-btns .btn{margin:1px}
+.phone-input-group .input-group-text{background:#e8f0fe;color:var(--primary-blue);font-weight:700;border:1px solid #dadce0;border-right:none}
+.phone-input-group .form-control{border-left:none}
+.phone-input-group .form-control:focus{box-shadow:none;border-color:#dadce0}
+.phone-input-group:focus-within .input-group-text{border-color:#1A73E8}
+.phone-input-group:focus-within .form-control{border-color:#1A73E8;box-shadow:0 0 0 .2rem rgba(26,115,232,.15)}
+.modal-content{border-radius:12px;border:none;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.modal-header.bg-primary{background:var(--primary-blue)!important}
+#modalRegistro .modal-dialog-scrollable{max-height:calc(100vh - 1rem);margin:.5rem auto}
+#modalRegistro .modal-dialog-scrollable .modal-content{max-height:calc(100vh - 1rem);overflow:hidden}
+#modalRegistro .modal-dialog-scrollable .modal-body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#modalRegistro .modal-body{padding:1rem 1.25rem}
+#modalRegistro .row.g-3{--bs-gutter-y:.75rem;--bs-gutter-x:.75rem}
+#modalRegistro .form-label{margin-bottom:.25rem;font-size:.9rem}
+#modalRegistro .form-control,#modalRegistro .form-select{padding:.4rem .65rem;font-size:.92rem}
+#modalRegistro textarea{min-height:60px}
+#modalRegistro hr{margin:.75rem 0}
+#modalRegistro h6{margin-bottom:.5rem!important}
+@media (max-width:576px){#modalRegistro .modal-dialog-scrollable{max-height:calc(100vh - .5rem);margin:.25rem}#modalRegistro .modal-dialog-scrollable .modal-content{max-height:calc(100vh - .5rem)}#modalRegistro .modal-body{padding:.75rem}}
+.btn-sms{background:#28a745!important;border-color:#28a745!important;color:#fff!important}
+.btn-sms:hover{background:#218838!important;border-color:#1e7e34!important}
+.btn-wsp{background:#25D366!important;border-color:#25D366!important;color:#fff!important}
+.btn-wsp:hover{background:#1da851!important;border-color:#1da851!important}
+</style>
+</head>
+<body>
+
+<header class="app-header mb-4">
+  <div class="container-fluid px-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="logo-container">
+          <img src="https://placehold.co/100x100/1A73E8/FFFFFF?text=ITH+JM" alt="Logo ITH JM"
+               onerror="this.src='https://via.placeholder.com/60/1A73E8/FFFFFF?text=ITH'">
+        </div>
+        <div>
+          <h1 class="h5 mb-0 fw-bold text-primary">Registro de ingresos y egresos de equipos electrónicos</h1>
+          <span class="text-muted small fw-semibold">Taller de Electrónica ITH JM</span>
+          <div class="credit-text">Creado por: Prof. Ricardo Cruz_Docente Innovador</div>
+        </div>
+      </div>
+      <div id="userInfoSection" class="d-none align-items-center gap-2">
+        <div class="text-end me-1">
+          <div id="loggedUserName" class="fw-bold small">--</div>
+          <span id="loggedUserRole" class="badge badge-role small">--</span>
+        </div>
+        <button id="btnGestionUsuarios" class="btn btn-outline-custom btn-sm d-none"
+                onclick="abrirModalUsuarios()" title="Gestión de Usuarios">
+          <i class="fa-solid fa-users-gear me-1"></i>Usuarios
+        </button>
+        <button id="btnCambiarPass" class="btn btn-outline-custom btn-sm"
+                onclick="abrirModalCambiarPass()" title="Cambiar Contraseña">
+          <i class="fa-solid fa-key me-1"></i>Contraseña
+        </button>
+        <button class="btn btn-danger btn-sm rounded-pill" onclick="cerrarSesion()" title="Cerrar Sesión">
+          <i class="fa-solid fa-right-from-bracket me-1"></i>Salir
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container-fluid px-4 mb-5">
+
+  <section id="secLogin" class="row justify-content-center py-5">
+    <div class="col-12 col-md-5 col-lg-4">
+      <div class="card card-custom p-4 shadow-sm">
+        <div class="text-center mb-4">
+          <div class="logo-container mx-auto mb-3" style="width:80px;height:80px;">
+            <img src="https://placehold.co/100x100/1A73E8/FFFFFF?text=ITH+JM" alt="Logo">
+          </div>
+          <h4 class="fw-bold">Iniciar Sesión</h4>
+          <p class="text-muted small mb-1">Taller de Electrónica ITH JM</p>
+          <p class="credit-text mb-0">Creado por: Prof. Ricardo Cruz_Docente Innovador</p>
+        </div>
+        <form id="formLogin" onsubmit="procesarLogin(event)">
+          <div class="mb-3">
+            <label for="loginUser" class="form-label fw-medium">Nombre de Usuario</label>
+            <input type="text" id="loginUser" class="form-control" placeholder="Ej. Ricardo Cruz" required>
+          </div>
+          <div class="mb-4">
+            <label for="loginPass" class="form-label fw-medium">Contraseña</label>
+            <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required>
+          </div>
+          <div id="loginAlert" class="alert alert-danger d-none py-2 small"></div>
+          <button type="submit" id="btnLoginSubmit" class="btn btn-action w-100 py-2">
+            <i class="fa-solid fa-lock me-2"></i>Ingresar
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="secDashboard" class="d-none">
+    <div class="card card-custom p-3 mb-4 bg-light">
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-4">
+          <button class="btn btn-action w-100" onclick="abrirModalRegistro()">
+            <i class="fa-solid fa-circle-plus me-2"></i>Nuevo Registro
+          </button>
+        </div>
+        <div class="col-12 col-md-5">
+          <div class="input-group">
+            <span class="input-group-text bg-white text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="text" id="inputBuscar" class="form-control"
+                   placeholder="Buscar por dueño, equipo, técnico, falla..." onkeyup="filtrarTabla()">
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <button class="btn btn-outline-custom w-100" onclick="exportarCSV()">
+            <i class="fa-solid fa-file-csv me-2"></i>Exportar CSV
+          </button>
+        </div>
+      </div>
+    </div>
+    <ul class="nav nav-tabs mb-3" id="yearTabs"></ul>
+    <div class="card card-custom p-0 overflow-hidden">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Dueño</th><th>Teléfono</th><th>Fecha Ingreso</th><th>Tipo</th>
+              <th>Estudiante</th><th>Técnico</th><th>Fecha Egreso</th><th>Costo</th>
+              <th>Fotos</th><th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyRegistros"></tbody>
+        </table>
+      </div>
+      <div id="noDataMessage" class="text-center py-5 d-none">
+        <i class="fa-solid fa-folder-open fa-3x text-muted mb-3"></i>
+        <p class="text-muted mb-0">No se encontraron registros para el año seleccionado.</p>
+      </div>
+      <div id="loadingSpinner" class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+        <p class="text-muted small mt-2">Cargando datos desde Google Sheets...</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MODAL REGISTRO -->
+<div class="modal fade" id="modalRegistro" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold" id="modalRegistroLabel">
+          <i class="fa-solid fa-screwdriver-wrench me-2"></i>Nuevo Registro de Equipo
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <form id="formEquipo" class="modal-body" novalidate>
+        <input type="hidden" id="equipoId">
+        <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-user me-2"></i>Datos del Cliente</h6>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label for="formDueno" class="form-label fw-semibold">Nombre del Dueño *</label>
+            <input type="text" id="formDueno" class="form-control" placeholder="Ej. Juan Pérez" required>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="formTelefono" class="form-label fw-semibold">Teléfono Celular * <span class="text-muted small">(Honduras)</span></label>
+            <div class="input-group phone-input-group">
+              <span class="input-group-text">+504</span>
+              <input type="tel" id="formTelefono" class="form-control"
+                     placeholder="9999-9999" maxlength="9" inputmode="numeric"
+                     autocomplete="tel-national" required oninput="formatearTelefonoHN(this)">
+            </div>
+            <div class="form-text small">8 dígitos. Inicia con 3, 8 o 9. Ej: 9988-7766</div>
+          </div>
+        </div>
+        <hr>
+        <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-laptop me-2"></i>Datos del Equipo</h6>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label for="formUsuario" class="form-label fw-semibold">Usuario que ingresa</label>
+            <input type="text" id="formUsuario" class="form-control bg-light" readonly>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="formFechaIngreso" class="form-label fw-semibold">Fecha de Ingreso *</label>
+            <input type="date" id="formFechaIngreso" class="form-control" required>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="formTipoAparato" class="form-label fw-semibold">Tipo de Aparato *</label>
+            <select id="formTipoAparato" class="form-select" required>
+              <option value="" disabled selected>Seleccione...</option>
+              <option>Laptop</option><option>PC de escritorio</option><option>Tablet</option>
+              <option>Smartphone</option><option>Impresora</option><option>Monitor</option>
+              <option>Teclado</option><option>Mouse</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="formEstudiante" class="form-label fw-semibold">Estudiante Asignado *</label>
+            <input type="text" id="formEstudiante" class="form-control" placeholder="Nombre del estudiante" required>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="formTecnico" class="form-label fw-semibold">Técnico Responsable *</label>
+            <input type="text" id="formTecnico" class="form-control" placeholder="Nombre del técnico" required>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="formFotos" class="form-label fw-semibold">Fotografías (1 a 4) *</label>
+            <input type="file" id="formFotos" class="form-control" accept="image/*" multiple
+                   onchange="validarYPrevisualizarFotos(this)">
+            <div class="form-text small">Máx. 2 MB por foto.</div>
+          </div>
+          <div class="col-12"><div id="previewFotosContainer" class="preview-container"></div></div>
+          <div class="col-12">
+            <label for="formFallaInicial" class="form-label fw-semibold">Diagnóstico o Falla Inicial *</label>
+            <textarea id="formFallaInicial" class="form-control" rows="2"
+                      placeholder="Describa la falla..." required></textarea>
+          </div>
+        </div>
+        <hr>
+        <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-flag-checkered me-2"></i>Egreso (Opcional)</h6>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label for="formFechaEgreso" class="form-label fw-semibold">Fecha de Egreso</label>
+            <input type="date" id="formFechaEgreso" class="form-control">
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="formCosto" class="form-label fw-semibold">Costo (L.)</label>
+            <input type="number" step="0.01" min="0" id="formCosto" class="form-control" placeholder="0.00">
+          </div>
+          <div class="col-12">
+            <label for="formDiagnosticoFinal" class="form-label fw-semibold">Diagnóstico Final</label>
+            <textarea id="formDiagnosticoFinal" class="form-control" rows="2"
+                      placeholder="Solución aplicada..."></textarea>
+          </div>
+        </div>
+      </form>
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" id="btnGuardarEquipo" class="btn btn-action px-4" onclick="guardarFormularioEquipo()">
+          <i class="fa-solid fa-floppy-disk me-2"></i>Guardar Registro
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL USUARIOS -->
+<div class="modal fade" id="modalUsuarios" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold"><i class="fa-solid fa-users me-2"></i>Gestión de Usuarios</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formNuevoUsuario" onsubmit="guardarNuevoUsuario(event)" class="card p-3 mb-3 bg-light border-0">
+          <h6 class="fw-bold text-primary mb-3">Crear Nuevo Usuario</h6>
+          <div class="mb-2">
+            <label class="form-label small fw-semibold">Nombre Completo</label>
+            <input type="text" id="nuNombre" class="form-control form-control-sm" required>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small fw-semibold">Rol</label>
+            <select id="nuRol" class="form-select form-select-sm" required>
+              <option value="Editor">Editor</option>
+              <option value="Administrador Secundario">Administrador Secundario</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Contraseña</label>
+            <input type="password" id="nuPassword" class="form-control form-control-sm" minlength="6" required>
+          </div>
+          <button type="submit" class="btn btn-action btn-sm w-100">
+            <i class="fa-solid fa-user-plus me-1"></i>Registrar Usuario
+          </button>
+        </form>
+        <h6 class="fw-bold mb-2">Usuarios Registrados</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered">
+            <thead class="table-light"><tr><th>Nombre</th><th>Rol</th></tr></thead>
+            <tbody id="tbodyUsuarios"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CAMBIAR CONTRASEÑA -->
+<div class="modal fade" id="modalCambiarPass" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold"><i class="fa-solid fa-key me-2"></i>Cambiar Contraseña</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="formCambiarPass" class="modal-body" onsubmit="guardarNuevaContrasena(event)">
+        <div class="mb-2">
+          <label class="form-label small fw-semibold">Contraseña Actual</label>
+          <input type="password" id="cpActual" class="form-control form-control-sm" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label small fw-semibold">Nueva Contraseña</label>
+          <input type="password" id="cpNueva" class="form-control form-control-sm" minlength="6" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label small fw-semibold">Confirmar Nueva</label>
+          <input type="password" id="cpConfirmar" class="form-control form-control-sm" minlength="6" required>
+        </div>
+        <div id="cpAlert" class="alert alert-danger d-none py-2 small mb-0"></div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-action btn-sm" onclick="document.getElementById('formCambiarPass').requestSubmit()">
+          <i class="fa-solid fa-check me-1"></i>Cambiar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FOTOS -->
+<div class="modal fade" id="modalFotosView" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title fw-bold"><i class="fa-solid fa-images me-2"></i>Fotografías</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center" id="galeriaFotosContainer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INFORME -->
+<div class="modal fade" id="modalInforme" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold"><i class="fa-solid fa-file-lines me-2"></i>Informe / Notificar</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="infoResumenReg" class="alert alert-light border small mb-3"></div>
+        <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-file-pdf me-2"></i>Generar PDF</h6>
+        <div class="d-grid gap-2 mb-3">
+          <button class="btn btn-action" onclick="generarPDF('entrada')">
+            <i class="fa-solid fa-right-to-bracket me-2"></i>Informe de ENTRADA
+          </button>
+          <button class="btn btn-action" onclick="generarPDF('egreso')">
+            <i class="fa-solid fa-right-from-bracket me-2"></i>Informe de EGRESO
+          </button>
+        </div>
+        <hr>
+        <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-paper-plane me-2"></i>Enviar al Cliente</h6>
+        <div class="d-grid gap-2">
+          <button class="btn btn-sms" onclick="notificarCliente('sms')">
+            <i class="fa-solid fa-comment-sms me-2"></i>Enviar por SMS
+          </button>
+          <button class="btn btn-wsp" onclick="notificarCliente('wsp')">
+            <i class="fa-brands fa-whatsapp me-2"></i>Enviar por WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ============================================================
+   ⚙️ CONFIGURACIÓN — TU URL DE APPS SCRIPT YA ESTÁ INTEGRADA
+   ============================================================ */
+const API_URL = 'https://script.google.com/macros/s/AKfycbz_Hv68BYSz23YavoUrL17b-h4wufOgv81gWK1F2_jHzFpHjPakgEIQ7a0AZv4XqTg6Ag/exec';
+
+/* ============================================================
+   ESTADO GLOBAL
+   ============================================================ */
+let usuarioActual = null;
+let anioSeleccionado = new Date().getFullYear();
+let listaRegistrosActuales = [];
+let fotosBase64Cargadas = [];
+let registroSeleccionadoParaInforme = null;
+let guardandoRegistro = false;
+
+let bsModalRegistro, bsModalUsuarios, bsModalFotos, bsModalInforme, bsModalCambiarPass;
+
+/* ============================================================
+   CONSTANTES DE HONDURAS
+   ============================================================ */
+const HN_CODIGO_PAIS = '504';
+const HN_PREFIJO_MOSTRAR = '+504';
+const HN_REGEX_8_DIGITOS = /^\d{8}$/;
+const HN_PREFIJOS_CELULAR = /^[389]/;
+
+/* ============================================================
+   API HELPER
+   ============================================================ */
+async function llamarAPI(accion, params) {
+  params = params || {};
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(Object.assign({ accion: accion }, params)),
+      redirect: 'follow'
+    });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    return await response.json();
+  } catch (err) {
+    console.error('[API Error]', err);
+    return { exito: false, mensaje: 'Error de conexión: ' + err.message };
+  }
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+function log() { try { console.log.apply(console, ['[ITH-JM]'].concat([].slice.call(arguments))); } catch (e) { } }
+function logError() { try { console.error.apply(console, ['[ITH-JM ERROR]'].concat([].slice.call(arguments))); } catch (e) { } }
+function escapeHtml(t) {
+  if (t === null || t === undefined) return '';
+  return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+function normalizarFecha(f) {
+  if (!f) return '';
+  if (typeof f === 'string') {
+    if (/^\d{4}-\d{2}-\d{2}/.test(f)) return f.substring(0, 10);
+    return f;
+  }
+  if (f instanceof Date) {
+    const y = f.getFullYear();
+    const m = String(f.getMonth() + 1).padStart(2, '0');
+    const d = String(f.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+  }
+  return String(f);
+}
+function fechaLocalHoy() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+/* ============================================================
+   TELÉFONO HONDUREÑO
+   ============================================================ */
+function formatearTelefonoHN(input) {
+  let v = input.value.replace(/\D/g, '').substring(0, 8);
+  if (v.length > 4) v = v.substring(0, 4) + '-' + v.substring(4);
+  input.value = v;
+}
+function extraer8Digitos(tel) { return String(tel || '').replace(/\D/g, '').slice(-8); }
+function esTelefonoHNValido(tel) {
+  const d = extraer8Digitos(tel);
+  return HN_REGEX_8_DIGITOS.test(d) && HN_PREFIJOS_CELULAR.test(d);
+}
+function formatearTelefonoHNCompleto(tel) {
+  const d = extraer8Digitos(tel);
+  if (d.length !== 8) return '';
+  return HN_PREFIJO_MOSTRAR + ' ' + d.substring(0, 4) + '-' + d.substring(4);
+}
+function poblarInputTelefono(telGuardado) {
+  const input = document.getElementById('formTelefono');
+  const d = extraer8Digitos(telGuardado);
+  input.value = d.length === 8 ? d.substring(0, 4) + '-' + d.substring(4) : '';
+}
+
+/* ============================================================
+   INICIALIZACIÓN
+   ============================================================ */
+window.addEventListener('load', function () {
+  try {
+    bsModalRegistro    = new bootstrap.Modal(document.getElementById('modalRegistro'), { backdrop: 'static', keyboard: false });
+    bsModalUsuarios    = new bootstrap.Modal(document.getElementById('modalUsuarios'));
+    bsModalFotos       = new bootstrap.Modal(document.getElementById('modalFotosView'));
+    bsModalInforme     = new bootstrap.Modal(document.getElementById('modalInforme'));
+    bsModalCambiarPass = new bootstrap.Modal(document.getElementById('modalCambiarPass'));
+    log('App lista. API:', API_URL);
+  } catch (e) {
+    logError('Error al inicializar modales:', e);
+  }
+  verificarSesion();
+});
+
+function verificarSesion() {
+  const s = sessionStorage.getItem('ITH_JM_SESSION');
+  if (s) {
+    try { usuarioActual = JSON.parse(s); mostrarInterfazPrincipal(); return; }
+    catch (e) { sessionStorage.removeItem('ITH_JM_SESSION'); }
+  }
+  mostrarLogin();
+}
+function mostrarLogin() {
+  document.getElementById('secLogin').classList.remove('d-none');
+  document.getElementById('secDashboard').classList.add('d-none');
+  const u = document.getElementById('userInfoSection');
+  u.classList.add('d-none'); u.classList.remove('d-flex');
+}
+function mostrarInterfazPrincipal() {
+  document.getElementById('secLogin').classList.add('d-none');
+  document.getElementById('secDashboard').classList.remove('d-none');
+  const u = document.getElementById('userInfoSection');
+  u.classList.remove('d-none'); u.classList.add('d-flex');
+  document.getElementById('loggedUserName').textContent = usuarioActual.nombre;
+  document.getElementById('loggedUserRole').textContent = usuarioActual.rol;
+  if (usuarioActual.rol === 'Administrador Principal') {
+    document.getElementById('btnGestionUsuarios').classList.remove('d-none');
+  } else {
+    document.getElementById('btnGestionUsuarios').classList.add('d-none');
+  }
+  generarPestanasAnios();
+  cargarRegistrosPorAnio(anioSeleccionado);
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+async function procesarLogin(e) {
+  e.preventDefault();
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  const alertBox = document.getElementById('loginAlert');
+  const btn = document.getElementById('btnLoginSubmit');
+  alertBox.classList.add('d-none');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Validando...';
+
+  const res = await llamarAPI('loginUsuario', { nombre: user, password: pass });
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-lock me-2"></i>Ingresar';
+
+  if (res && res.exito) {
+    usuarioActual = res.usuario;
+    sessionStorage.setItem('ITH_JM_SESSION', JSON.stringify(usuarioActual));
+    mostrarInterfazPrincipal();
+  } else {
+    alertBox.textContent = (res && res.mensaje) ? res.mensaje : 'Credenciales incorrectas.';
+    alertBox.classList.remove('d-none');
+  }
+}
+function cerrarSesion() {
+  sessionStorage.removeItem('ITH_JM_SESSION');
+  usuarioActual = null;
+  document.getElementById('formLogin').reset();
+  mostrarLogin();
+}
+
+/* ============================================================
+   PESTAÑAS DE AÑOS
+   ============================================================ */
+function generarPestanasAnios() {
+  const cont = document.getElementById('yearTabs');
+  cont.innerHTML = '';
+  const base = new Date().getFullYear();
+  for (let i = 0; i < 5; i++) {
+    const yr = base - i;
+    const li = document.createElement('li'); li.className = 'nav-item';
+    const a = document.createElement('button'); a.type = 'button';
+    a.className = 'nav-link' + (yr === anioSeleccionado ? ' active' : '');
+    a.textContent = 'Año ' + yr;
+    a.onclick = function () {
+      document.querySelectorAll('#yearTabs .nav-link').forEach(el => el.classList.remove('active'));
+      a.classList.add('active');
+      anioSeleccionado = yr;
+      cargarRegistrosPorAnio(yr);
+    };
+    li.appendChild(a); cont.appendChild(li);
+  }
+}
+
+/* ============================================================
+   MODAL REGISTRO
+   ============================================================ */
+function abrirModalRegistro() {
+  document.getElementById('formEquipo').reset();
+  document.getElementById('equipoId').value = '';
+  document.getElementById('modalRegistroLabel').innerHTML =
+    '<i class="fa-solid fa-screwdriver-wrench me-2"></i>Nuevo Registro de Equipo';
+  document.getElementById('formUsuario').value = usuarioActual.nombre;
+  document.getElementById('formFechaIngreso').value = fechaLocalHoy();
+  document.getElementById('formTelefono').value = '';
+  fotosBase64Cargadas = [];
+  document.getElementById('previewFotosContainer').innerHTML = '';
+  document.getElementById('formFotos').value = '';
+  guardandoRegistro = false;
+  bsModalRegistro.show();
+}
+
+function validarYPrevisualizarFotos(input) {
+  const files = Array.from(input.files);
+  const cont = document.getElementById('previewFotosContainer');
+  cont.innerHTML = '';
+  fotosBase64Cargadas = [];
+
+  if (files.length === 0) return;
+  if (files.length > 4) { alert('Solo se permiten máximo 4 fotografías.'); input.value = ''; return; }
+
+  const MAX_BYTES = 2 * 1024 * 1024;
+  let aceptadas = 0;
+  files.forEach(function (file) {
+    if (!file.type.startsWith('image/')) { alert('No es imagen: ' + file.name); return; }
+    if (file.size > MAX_BYTES) { alert('"' + file.name + '" supera los 2 MB.'); return; }
+    aceptadas++;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      fotosBase64Cargadas.push({ data: ev.target.result, name: file.name });
+      const img = document.createElement('img');
+      img.src = ev.target.result; img.className = 'preview-thumb'; img.title = file.name;
+      cont.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+  if (aceptadas === 0) input.value = '';
+}
+
+function validarFormularioEquipo() {
+  const errores = [];
+  const g = id => document.getElementById(id).value.trim();
+  const dueno = g('formDueno');
+  const telefonoRaw = g('formTelefono');
+  const fechaIngreso = g('formFechaIngreso');
+  const tipoAparato = g('formTipoAparato');
+  const estudiante = g('formEstudiante');
+  const tecnico = g('formTecnico');
+  const fallaInicial = g('formFallaInicial');
+
+  if (!dueno) errores.push('• Nombre del dueño');
+  if (!telefonoRaw) errores.push('• Teléfono celular');
+  else if (!esTelefonoHNValido(telefonoRaw)) errores.push('• Teléfono hondureño inválido (8 dígitos, inicia con 3, 8 o 9)');
+  if (!fechaIngreso) errores.push('• Fecha de ingreso');
+  if (!tipoAparato) errores.push('• Tipo de aparato');
+  if (!estudiante) errores.push('• Estudiante asignado');
+  if (!tecnico) errores.push('• Técnico responsable');
+  if (!fallaInicial) errores.push('• Falla inicial');
+
+  const id = document.getElementById('equipoId').value;
+  if (!id && fotosBase64Cargadas.length === 0) errores.push('• Al menos 1 fotografía');
+
+  if (errores.length > 0) {
+    alert('Complete los siguientes campos:\n\n' + errores.join('\n'));
+    return null;
+  }
+  return {
+    usuario: document.getElementById('formUsuario').value,
+    dueno: dueno,
+    telefono: formatearTelefonoHNCompleto(telefonoRaw),
+    estudiante: estudiante,
+    fechaIngreso: fechaIngreso,
+    tipoAparato: tipoAparato,
+    tecnico: tecnico,
+    fallaInicial: fallaInicial,
+    fechaEgreso: document.getElementById('formFechaEgreso').value,
+    costo: document.getElementById('formCosto').value,
+    diagnosticoFinal: document.getElementById('formDiagnosticoFinal').value,
+    fotosNuevas: fotosBase64Cargadas
+  };
+}
+
+async function guardarFormularioEquipo() {
+  if (guardandoRegistro) return;
+  const datos = validarFormularioEquipo();
+  if (!datos) return;
+
+  const id = document.getElementById('equipoId').value;
+  const btn = document.getElementById('btnGuardarEquipo');
+  const htmlOriginal = '<i class="fa-solid fa-floppy-disk me-2"></i>Guardar Registro';
+
+  guardandoRegistro = true;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Guardando...';
+
+  let res;
+  if (id) {
+    res = await llamarAPI('actualizarRegistro', { id: id, datos: datos });
+  } else {
+    res = await llamarAPI('guardarRegistro', { datos: datos });
+  }
+
+  guardandoRegistro = false;
+  btn.disabled = false;
+  btn.innerHTML = htmlOriginal;
+
+  try { bsModalRegistro.hide(); } catch (e) { }
+  document.getElementById('formEquipo').reset();
+  document.getElementById('equipoId').value = '';
+  fotosBase64Cargadas = [];
+  document.getElementById('previewFotosContainer').innerHTML = '';
+
+  setTimeout(function () {
+    if (res && res.exito) {
+      alert('✅ ' + (res.mensaje || 'Registro guardado.'));
+      const anioRegistro = String(datos.fechaIngreso).substring(0, 4);
+      if (Number(anioRegistro) !== Number(anioSeleccionado)) {
+        anioSeleccionado = Number(anioRegistro);
+        generarPestanasAnios();
+      }
+      cargarRegistrosPorAnio(anioSeleccionado);
+    } else {
+      alert('❌ Error: ' + (res && res.mensaje ? res.mensaje : 'desconocido'));
+    }
+  }, 350);
+}
+
+/* ============================================================
+   CARGA DE REGISTROS
+   ============================================================ */
+async function cargarRegistrosPorAnio(anio) {
+  const sp = document.getElementById('loadingSpinner');
+  sp.style.display = 'block';
+  document.getElementById('noDataMessage').classList.add('d-none');
+  document.getElementById('tbodyRegistros').innerHTML = '';
+
+  const res = await llamarAPI('obtenerRegistros', { anio: anio });
+  renderizarTablaRegistros(res);
+}
+
+function renderizarTablaRegistros(res) {
+  document.getElementById('loadingSpinner').style.display = 'none';
+  const tbody = document.getElementById('tbodyRegistros');
+  tbody.innerHTML = '';
+
+  if (!res || !res.exito || !res.registros || res.registros.length === 0) {
+    document.getElementById('noDataMessage').classList.remove('d-none');
+    listaRegistrosActuales = []; return;
+  }
+  document.getElementById('noDataMessage').classList.add('d-none');
+  listaRegistrosActuales = res.registros;
+
+  const esAdmin = (usuarioActual.rol === 'Administrador Principal' ||
+                   usuarioActual.rol === 'Administrador Secundario');
+
+  res.registros.forEach(function (reg) {
+    const tr = document.createElement('tr');
+
+    let btnFotos = '<span class="text-muted small">—</span>';
+    if (reg.fotos) {
+      const arr = String(reg.fotos).split(',').filter(u => u.trim() !== '');
+      if (arr.length > 0) {
+        btnFotos = '<button class="btn btn-sm btn-outline-primary rounded-pill" ' +
+          'onclick="verFotosModal(decodeURIComponent(\'' + encodeURIComponent(reg.fotos) + '\'))">' +
+          '<i class="fa-solid fa-image me-1"></i>' + arr.length + '</button>';
+      }
+    }
+
+    let acciones = '<div class="action-btns d-flex flex-wrap justify-content-center">' +
+      '<button class="btn btn-sm btn-action" onclick="abrirModalInforme(\'' + reg.id + '\')" title="Informe">' +
+        '<i class="fa-solid fa-file-pdf"></i></button>' +
+      '<button class="btn btn-sm btn-outline-primary" onclick="editarRegistro(\'' + reg.id + '\')" title="Editar">' +
+        '<i class="fa-solid fa-pen-to-square"></i></button>';
+    if (esAdmin) {
+      acciones += '<button class="btn btn-sm btn-outline-danger" onclick="eliminarRegistroConfirm(\'' + reg.id + '\')" title="Eliminar">' +
+                    '<i class="fa-solid fa-trash"></i></button>';
+    }
+    acciones += '</div>';
+
+    const tieneEgreso = reg.fechaEgreso && String(reg.fechaEgreso).trim() !== '';
+    const estadoBadge = tieneEgreso
+      ? '<span class="badge bg-success">Entregado</span>'
+      : '<span class="badge bg-warning text-dark">En Taller</span>';
+
+    tr.innerHTML =
+      '<td class="fw-semibold">' + escapeHtml(reg.dueno) + '</td>' +
+      '<td class="text-nowrap">' + (reg.telefono ? escapeHtml(reg.telefono) : '—') + '</td>' +
+      '<td>' + escapeHtml(reg.fechaIngreso || '') + '</td>' +
+      '<td><span class="badge bg-secondary">' + escapeHtml(reg.tipoAparato) + '</span></td>' +
+      '<td>' + escapeHtml(reg.estudiante) + '</td>' +
+      '<td>' + escapeHtml(reg.tecnico) + '</td>' +
+      '<td>' + (tieneEgreso ? escapeHtml(reg.fechaEgreso) + '<br>' + estadoBadge : estadoBadge) + '</td>' +
+      '<td class="fw-bold">' +
+        (reg.costo !== '' && reg.costo !== undefined && reg.costo !== null
+          ? 'L. ' + parseFloat(reg.costo).toFixed(2) : '-') + '</td>' +
+      '<td>' + btnFotos + '</td>' +
+      '<td class="text-center">' + acciones + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function verFotosModal(cadenaUrls) {
+  const cont = document.getElementById('galeriaFotosContainer');
+  cont.innerHTML = '';
+  String(cadenaUrls).split(',').filter(u => u.trim() !== '').forEach(function (url) {
+    const a = document.createElement('a');
+    a.href = url.trim(); a.target = '_blank'; a.className = 'd-inline-block m-2';
+    const img = document.createElement('img');
+    img.src = url.trim(); img.className = 'img-thumbnail';
+    img.style.maxHeight = '220px'; img.style.objectFit = 'contain';
+    img.onerror = function () { this.src = 'https://via.placeholder.com/200?text=Foto'; };
+    a.appendChild(img); cont.appendChild(a);
+  });
+  bsModalFotos.show();
+}
+
+function editarRegistro(id) {
+  const reg = listaRegistrosActuales.find(r => String(r.id) === String(id));
+  if (!reg) return;
+
+  document.getElementById('equipoId').value = reg.id;
+  document.getElementById('modalRegistroLabel').innerHTML =
+    '<i class="fa-solid fa-pen-to-square me-2"></i>Editar Registro';
+  document.getElementById('formDueno').value            = reg.dueno || '';
+  poblarInputTelefono(reg.telefono);
+  document.getElementById('formEstudiante').value       = reg.estudiante || '';
+  document.getElementById('formUsuario').value          = reg.usuario || '';
+  document.getElementById('formFechaIngreso').value     = normalizarFecha(reg.fechaIngreso);
+  document.getElementById('formTipoAparato').value      = reg.tipoAparato || '';
+  document.getElementById('formTecnico').value          = reg.tecnico || '';
+  document.getElementById('formFallaInicial').value     = reg.fallaInicial || '';
+  document.getElementById('formFechaEgreso').value      = normalizarFecha(reg.fechaEgreso);
+  document.getElementById('formCosto').value            = (reg.costo !== undefined ? reg.costo : '');
+  document.getElementById('formDiagnosticoFinal').value = reg.diagnosticoFinal || '';
+
+  fotosBase64Cargadas = [];
+  document.getElementById('previewFotosContainer').innerHTML = '';
+  document.getElementById('formFotos').value = '';
+  guardandoRegistro = false;
+  bsModalRegistro.show();
+}
+
+async function eliminarRegistroConfirm(id) {
+  if (!confirm('¿Eliminar este registro? No se puede deshacer.')) return;
+  const res = await llamarAPI('eliminarRegistro', { id: id });
+  alert((res && res.mensaje) || 'Eliminado.');
+  cargarRegistrosPorAnio(anioSeleccionado);
+}
+
+/* ============================================================
+   INFORME PDF / SMS / WSP
+   ============================================================ */
+function abrirModalInforme(id) {
+  const reg = listaRegistrosActuales.find(r => String(r.id) === String(id));
+  if (!reg) return;
+  registroSeleccionadoParaInforme = reg;
+
+  const egresado = reg.fechaEgreso && String(reg.fechaEgreso).trim() !== '';
+  document.getElementById('infoResumenReg').innerHTML =
+    '<strong>Cliente:</strong> ' + escapeHtml(reg.dueno || '-') +
+    '<br><strong>Teléfono:</strong> ' + escapeHtml(reg.telefono || '-') +
+    '<br><strong>Equipo:</strong> ' + escapeHtml(reg.tipoAparato || '-') +
+    '<br><strong>Estado:</strong> ' +
+    (egresado ? '<span class="badge bg-success">Entregado</span>'
+              : '<span class="badge bg-warning text-dark">En Taller</span>');
+  bsModalInforme.show();
+}
+
+function generarPDF(tipo) {
+  const reg = registroSeleccionadoParaInforme;
+  if (!reg) { alert('Seleccione un registro.'); return; }
+
+  const esEntrada = tipo === 'entrada';
+  const titulo = esEntrada
+    ? 'COMPROBANTE DE INGRESO DE EQUIPO'
+    : 'COMPROBANTE DE EGRESO / ENTREGA DE EQUIPO';
+  const fecha = new Date().toLocaleDateString('es-HN', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  const bloqueEntrada = `
+    <tr><td class="lbl">Fecha de Ingreso:</td><td>${escapeHtml(reg.fechaIngreso || '')}</td></tr>
+    <tr><td class="lbl">Falla Reportada:</td><td class="multiline">${escapeHtml(reg.fallaInicial || '')}</td></tr>
+    <tr><td class="lbl">Estudiante Asignado:</td><td>${escapeHtml(reg.estudiante || '')}</td></tr>
+    <tr><td class="lbl">Técnico Responsable:</td><td>${escapeHtml(reg.tecnico || '')}</td></tr>`;
+  const bloqueEgreso = `
+    <tr><td class="lbl">Fecha de Ingreso:</td><td>${escapeHtml(reg.fechaIngreso || '')}</td></tr>
+    <tr><td class="lbl">Fecha de Egreso:</td><td>${escapeHtml(reg.fechaEgreso || '—')}</td></tr>
+    <tr><td class="lbl">Falla Reportada:</td><td class="multiline">${escapeHtml(reg.fallaInicial || '')}</td></tr>
+    <tr><td class="lbl">Diagnóstico Final:</td><td class="multiline">${escapeHtml(reg.diagnosticoFinal || '—')}</td></tr>
+    <tr><td class="lbl">Estudiante Asignado:</td><td>${escapeHtml(reg.estudiante || '')}</td></tr>
+    <tr><td class="lbl">Técnico Responsable:</td><td>${escapeHtml(reg.tecnico || '')}</td></tr>
+    <tr class="total"><td class="lbl">COSTO:</td>
+        <td><strong>L. ${(reg.costo || reg.costo === 0) ? parseFloat(reg.costo).toFixed(2) : '0.00'}</strong></td></tr>`;
+
+  const logo = 'https://placehold.co/120x120/1A73E8/FFFFFF?text=ITH+JM';
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${titulo}</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:'Roboto',Arial,sans-serif;color:#202124;padding:24px;max-width:800px;margin:auto}
+.header{display:flex;align-items:center;gap:16px;border-bottom:3px solid #1A73E8;padding-bottom:12px;margin-bottom:20px}
+.header img{width:80px;height:80px;border-radius:10px;object-fit:cover}
+.header h1{font-size:20px;margin:0;color:#1A73E8}
+.header p{margin:2px 0;font-size:13px;color:#555}
+.titulo-informe{text-align:center;font-size:17px;font-weight:700;color:#1A73E8;margin:16px 0;letter-spacing:1px}
+.seccion{margin-bottom:16px}
+.seccion h3{font-size:14px;background:#e8f0fe;color:#1A73E8;padding:6px 10px;margin:0 0 8px;border-radius:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td{padding:6px 8px;vertical-align:top;border-bottom:1px solid #eee}
+td.lbl{width:38%;font-weight:600;color:#3c4043}
+td.multiline{white-space:pre-wrap}
+tr.total{background:#f1f7fe;font-size:15px}
+.footer{margin-top:40px;display:flex;justify-content:space-between;font-size:12px}
+.firma{text-align:center;border-top:1px solid #333;padding-top:6px;width:45%}
+.credito{text-align:center;font-style:italic;color:#666;font-size:11px;margin-top:30px}
+@media print{body{padding:0}}
+</style></head><body>
+<div class="header">
+  <img src="${logo}" alt="Logo">
+  <div>
+    <h1>Taller de Electrónica ITH JM</h1>
+    <p><strong>Registro de ingresos y egresos de equipos electrónicos</strong></p>
+    <p>Creado por: Prof. Ricardo Cruz_Docente Innovador</p>
+    <p style="font-size:11px;color:#888">Tegucigalpa, Honduras · +504</p>
+  </div>
+</div>
+<div class="titulo-informe">${titulo}</div>
+<div class="seccion"><h3>Datos del Cliente</h3><table>
+  <tr><td class="lbl">Nombre del Dueño:</td><td>${escapeHtml(reg.dueno || '—')}</td></tr>
+  <tr><td class="lbl">Teléfono Celular:</td><td>${escapeHtml(reg.telefono || '—')}</td></tr>
+</table></div>
+<div class="seccion"><h3>Datos del Equipo</h3><table>
+  <tr><td class="lbl">Tipo de Aparato:</td><td>${escapeHtml(reg.tipoAparato || '')}</td></tr>
+  ${esEntrada ? bloqueEntrada : bloqueEgreso}
+  <tr><td class="lbl">Registrado por:</td><td>${escapeHtml(reg.usuario || '')}</td></tr>
+</table></div>
+<div class="seccion"><h3>Observaciones</h3>
+<p style="font-size:12px;color:#555">
+${esEntrada
+  ? 'El equipo descrito ha sido recibido en el Taller de Electrónica ITH JM para su diagnóstico y posterior reparación.'
+  : 'El equipo descrito ha sido entregado al cliente en las condiciones indicadas en este documento.'}
+</p></div>
+<div class="footer">
+  <div class="firma">Firma del Técnico</div>
+  <div class="firma">Firma del Cliente</div>
+</div>
+<div class="credito">
+  Informe generado el ${fecha}<br>
+  Taller de Electrónica ITH JM — Creado por: Prof. Ricardo Cruz_Docente Innovador
+</div>
+<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script>
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  if (!w) { alert('Permita ventanas emergentes.'); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+}
+
+function notificarCliente(canal) {
+  const reg = registroSeleccionadoParaInforme;
+  if (!reg) { alert('Seleccione un registro.'); return; }
+
+  const tel8 = extraer8Digitos(reg.telefono);
+  if (tel8.length !== 8) { alert('El registro no tiene un teléfono hondureño válido.'); return; }
+  const telInternacional = '+' + HN_CODIGO_PAIS + tel8;
+
+  const egresado = reg.fechaEgreso && String(reg.fechaEgreso).trim() !== '';
+  let msg;
+  if (!egresado) {
+    msg = 'Taller de Electronica ITH JM\n------------------------------\n' +
+      'Estimado(a) ' + (reg.dueno || 'cliente') + ',\n\n' +
+      'Le confirmamos el INGRESO de su equipo:\n' +
+      '• Equipo: ' + (reg.tipoAparato || '-') + '\n' +
+      '• Fecha ingreso: ' + (reg.fechaIngreso || '-') + '\n' +
+      '• Falla: ' + (reg.fallaInicial || '-') + '\n' +
+      '• Tecnico: ' + (reg.tecnico || '-') + '\n' +
+      '• Estudiante: ' + (reg.estudiante || '-') + '\n\n' +
+      'Le notificaremos cuando el diagnostico este listo.\n\n' +
+      'Gracias por su confianza.\nTaller de Electronica ITH JM\n' +
+      'Creado por: Prof. Ricardo Cruz_Docente Innovador';
+  } else {
+    msg = 'Taller de Electronica ITH JM\n------------------------------\n' +
+      'Estimado(a) ' + (reg.dueno || 'cliente') + ',\n\n' +
+      'Su equipo esta listo para ENTREGA:\n' +
+      '• Equipo: ' + (reg.tipoAparato || '-') + '\n' +
+      '• Fecha ingreso: ' + (reg.fechaIngreso || '-') + '\n' +
+      '• Fecha egreso: ' + (reg.fechaEgreso || '-') + '\n' +
+      '• Diagnostico final: ' + (reg.diagnosticoFinal || '-') + '\n' +
+      '• Tecnico: ' + (reg.tecnico || '-') + '\n' +
+      '• Costo: L. ' + (reg.costo ? parseFloat(reg.costo).toFixed(2) : '0.00') + '\n\n' +
+      'Puede pasar a retirarlo.\n\n' +
+      'Gracias por su confianza.\nTaller de Electronica ITH JM\n' +
+      'Creado por: Prof. Ricardo Cruz_Docente Innovador';
+  }
+
+  const msgEnc = encodeURIComponent(msg);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  if (canal === 'sms') a.href = 'sms:' + telInternacional + '?body=' + msgEnc;
+  else if (canal === 'wsp') {
+    a.href = 'https://wa.me/' + HN_CODIGO_PAIS + tel8 + '?text=' + msgEnc;
+    a.target = '_blank'; a.rel = 'noopener';
+  }
+  document.body.appendChild(a); a.click();
+  setTimeout(function () { document.body.removeChild(a); }, 500);
+}
+
+/* ============================================================
+   CAMBIO DE CONTRASEÑA
+   ============================================================ */
+function abrirModalCambiarPass() {
+  document.getElementById('formCambiarPass').reset();
+  document.getElementById('cpAlert').classList.add('d-none');
+  bsModalCambiarPass.show();
+}
+async function guardarNuevaContrasena(e) {
+  e.preventDefault();
+  const actual = document.getElementById('cpActual').value;
+  const nueva = document.getElementById('cpNueva').value;
+  const confirmar = document.getElementById('cpConfirmar').value;
+  const alertBox = document.getElementById('cpAlert');
+  alertBox.classList.add('d-none');
+  const error = (m) => { alertBox.textContent = m; alertBox.classList.remove('d-none'); };
+
+  if (nueva.length < 6) return error('Mínimo 6 caracteres.');
+  if (nueva !== confirmar) return error('Las contraseñas no coinciden.');
+  if (nueva === actual) return error('Debe ser diferente a la actual.');
+  if (!usuarioActual || !usuarioActual.id) return error('Sesión inválida.');
+
+  const res = await llamarAPI('cambiarContrasena', {
+    usuarioId: usuarioActual.id,
+    passActual: actual,
+    passNueva: nueva
+  });
+
+  if (res && res.exito) {
+    alert(res.mensaje || 'Actualizada.');
+    bsModalCambiarPass.hide();
+  } else {
+    error(res && res.mensaje ? res.mensaje : 'Error.');
+  }
+}
+
+/* ============================================================
+   BÚSQUEDA / EXPORTAR
+   ============================================================ */
+function filtrarTabla() {
+  const q = document.getElementById('inputBuscar').value.toLowerCase();
+  document.querySelectorAll('#tbodyRegistros tr').forEach(function (f) {
+    f.style.display = f.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+function exportarCSV() {
+  if (!listaRegistrosActuales || listaRegistrosActuales.length === 0) { alert('No hay datos.'); return; }
+  let csv = 'Dueño,Telefono,Estudiante,Usuario,Fecha_Ingreso,Tipo_Aparato,Falla_Inicial,Tecnico,Fecha_Egreso,Diagnostico_Final,Costo,Año\n';
+  listaRegistrosActuales.forEach(function (r) {
+    csv += [
+      '"' + (r.dueno || '') + '"', '"' + (r.telefono || '') + '"', '"' + (r.estudiante || '') + '"',
+      '"' + (r.usuario || '') + '"', '"' + (r.fechaIngreso || '') + '"', '"' + (r.tipoAparato || '') + '"',
+      '"' + String(r.fallaInicial || '').replace(/"/g, '""') + '"', '"' + (r.tecnico || '') + '"',
+      '"' + (r.fechaEgreso || '') + '"', '"' + String(r.diagnosticoFinal || '').replace(/"/g, '""') + '"',
+      '"' + (r.costo || '') + '"', '"' + (r.anio || '') + '"'
+    ].join(',') + '\n';
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'Registros_Taller_ITH_JM_' + anioSeleccionado + '.csv';
+  document.body.appendChild(link); link.click(); document.body.removeChild(link);
+}
+
+/* ============================================================
+   USUARIOS
+   ============================================================ */
+function abrirModalUsuarios() {
+  document.getElementById('formNuevoUsuario').reset();
+  cargarTablaUsuarios();
+  bsModalUsuarios.show();
+}
+async function cargarTablaUsuarios() {
+  const tbody = document.getElementById('tbodyUsuarios');
+  tbody.innerHTML = '<tr><td colspan="2" class="text-muted text-center small">Cargando...</td></tr>';
+  const res = await llamarAPI('obtenerUsuarios');
+  tbody.innerHTML = '';
+  if (res && res.exito && res.usuarios) {
+    res.usuarios.forEach(function (u) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + escapeHtml(u.nombre) + '</td>' +
+                     '<td><span class="badge bg-secondary">' + escapeHtml(u.rol) + '</span></td>';
+      tbody.appendChild(tr);
+    });
+  }
+}
+async function guardarNuevoUsuario(e) {
+  e.preventDefault();
+  const nombre = document.getElementById('nuNombre').value.trim();
+  const rol = document.getElementById('nuRol').value;
+  const pass = document.getElementById('nuPassword').value.trim();
+  if (pass.length < 6) { alert('Mínimo 6 caracteres.'); return; }
+
+  const res = await llamarAPI('crearUsuario', { usuario: { nombre: nombre, rol: rol, password: pass } });
+  alert((res && res.mensaje) || '');
+  if (res && res.exito) {
+    document.getElementById('formNuevoUsuario').reset();
+    cargarTablaUsuarios();
+  }
+}
+</script>
+</body>
+</html>
