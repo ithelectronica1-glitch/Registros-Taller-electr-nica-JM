@@ -53,6 +53,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 .btn-sms:hover{background:#218838!important;border-color:#1e7e34!important}
 .btn-wsp{background:#25D366!important;border-color:#25D366!important;color:#fff!important}
 .btn-wsp:hover{background:#1da851!important;border-color:#1da851!important}
+.admin-note{background:#fff3cd;border-left:4px solid #ffc107;padding:.5rem .75rem;border-radius:6px;font-size:.82rem;color:#856404}
 </style>
 </head>
 <body>
@@ -77,8 +78,8 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
           <span id="loggedUserRole" class="badge badge-role small">--</span>
         </div>
         <button id="btnGestionUsuarios" class="btn btn-outline-custom btn-sm d-none"
-                onclick="abrirModalUsuarios()" title="Gestión de Usuarios">
-          <i class="fa-solid fa-users-gear me-1"></i>Usuarios
+                onclick="abrirModalUsuarios()" title="Gestión de Usuarios (solo Administrador Principal)">
+          <i class="fa-solid fa-users-gear me-1"></i>Crear Usuario
         </button>
         <button id="btnCambiarPass" class="btn btn-outline-custom btn-sm"
                 onclick="abrirModalCambiarPass()" title="Cambiar Contraseña">
@@ -135,7 +136,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
           <div class="input-group">
             <span class="input-group-text bg-white text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
             <input type="text" id="inputBuscar" class="form-control"
-                   placeholder="Buscar por dueño, equipo, técnico, falla..." onkeyup="filtrarTabla()">
+                   placeholder="Buscar por dueño, equipo, docente/técnico, falla..." onkeyup="filtrarTabla()">
           </div>
         </div>
         <div class="col-12 col-md-3">
@@ -152,7 +153,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
           <thead class="table-light">
             <tr>
               <th>Dueño</th><th>Teléfono</th><th>Fecha Ingreso</th><th>Tipo</th>
-              <th>Estudiante</th><th>Técnico</th><th>Fecha Egreso</th><th>Costo</th>
+              <th>Estudiante</th><th>Docente/Técnico</th><th>Fecha Egreso</th><th>Costo</th>
               <th>Fotos</th><th class="text-center">Acciones</th>
             </tr>
           </thead>
@@ -213,26 +214,86 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
           </div>
           <div class="col-12 col-md-6">
             <label for="formTipoAparato" class="form-label fw-semibold">Tipo de Aparato *</label>
-            <select id="formTipoAparato" class="form-select" required>
+            <select id="formTipoAparato" class="form-select" required onchange="toggleOtroAparato()">
               <option value="" disabled selected>Seleccione...</option>
-              <option>Laptop</option><option>PC de escritorio</option><option>Tablet</option>
-              <option>Smartphone</option><option>Impresora</option><option>Monitor</option>
-              <option>Teclado</option><option>Mouse</option><option>Otro</option>
+              <optgroup label="💻 Computación">
+                <option>Laptop</option>
+                <option>PC de escritorio</option>
+                <option>Tablet</option>
+                <option>Monitor</option>
+                <option>Teclado</option>
+                <option>Mouse</option>
+                <option>Impresora</option>
+                <option>Escáner</option>
+                <option>Proyector</option>
+                <option>Servidor</option>
+              </optgroup>
+              <optgroup label="📱 Telefonía">
+                <option>Smartphone</option>
+                <option>Teléfono fijo</option>
+                <option>Router / Módem</option>
+                <option>Repetidor WiFi</option>
+              </optgroup>
+              <optgroup label="📺 Audio y Video">
+                <option>Televisor</option>
+                <option>Radio</option>
+                <option>Bocina / Parlante</option>
+                <option>Equipo de sonido</option>
+                <option>Cámara digital</option>
+                <option>Cámara de seguridad</option>
+                <option>Consola de videojuegos</option>
+                <option>Reproductor DVD / Blu-ray</option>
+              </optgroup>
+              <optgroup label="🏠 Electrodomésticos">
+                <option>Microondas</option>
+                <option>Refrigeradora</option>
+                <option>Lavadora</option>
+                <option>Secadora</option>
+                <option>Licuadora</option>
+                <option>Plancha</option>
+                <option>Ventilador</option>
+                <option>Aire acondicionado</option>
+                <option>Cafetera</option>
+                <option>Freidora de aire</option>
+              </optgroup>
+              <optgroup label="🔌 Componentes y accesorios">
+                <option>Fuente de poder</option>
+                <option>Tarjeta madre</option>
+                <option>Disco duro / SSD</option>
+                <option>Memoria RAM</option>
+                <option>Memoria USB</option>
+                <option>Tarjeta gráfica</option>
+                <option>Cargador</option>
+                <option>Cable / Adaptador</option>
+                <option>Batería</option>
+                <option>UPS / Regulador</option>
+              </optgroup>
+              <optgroup label="🔬 Equipos de laboratorio">
+                <option>Multímetro</option>
+                <option>Osciloscopio</option>
+                <option>Fuente de laboratorio</option>
+                <option>Cautín / Estación de soldadura</option>
+              </optgroup>
+              <option value="Otro">🔧 Otro (especificar)</option>
             </select>
+            <div id="otroAparatoContainer" class="d-none mt-2">
+              <input type="text" id="formOtroAparato" class="form-control"
+                     placeholder="Especifique qué aparato es...">
+            </div>
           </div>
           <div class="col-12 col-md-6">
             <label for="formEstudiante" class="form-label fw-semibold">Estudiante Asignado *</label>
             <input type="text" id="formEstudiante" class="form-control" placeholder="Nombre del estudiante" required>
           </div>
           <div class="col-12 col-md-6">
-            <label for="formTecnico" class="form-label fw-semibold">Técnico Responsable *</label>
-            <input type="text" id="formTecnico" class="form-control" placeholder="Nombre del técnico" required>
+            <label for="formTecnico" class="form-label fw-semibold">Docente/Técnico Responsable *</label>
+            <input type="text" id="formTecnico" class="form-control" placeholder="Nombre del docente o técnico" required>
           </div>
           <div class="col-12 col-md-6">
             <label for="formFotos" class="form-label fw-semibold">Fotografías (1 a 4) *</label>
             <input type="file" id="formFotos" class="form-control" accept="image/*" multiple
                    onchange="validarYPrevisualizarFotos(this)">
-            <div class="form-text small">Máx. 2 MB por foto.</div>
+            <div class="form-text small">Máx. 2 MB por foto. Se enviarán al cliente por SMS/WhatsApp.</div>
           </div>
           <div class="col-12"><div id="previewFotosContainer" class="preview-container"></div></div>
           <div class="col-12">
@@ -269,7 +330,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
   </div>
 </div>
 
-<!-- MODAL USUARIOS -->
+<!-- MODAL USUARIOS (SOLO ADMINISTRADOR PRINCIPAL) -->
 <div class="modal fade" id="modalUsuarios" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-md modal-dialog-scrollable">
     <div class="modal-content">
@@ -278,27 +339,36 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
+        <div class="admin-note mb-3">
+          <i class="fa-solid fa-lock me-1"></i>
+          <strong>Solo el Administrador Principal</strong> (Ricardo Cruz) puede crear usuarios y asignarles contraseña.
+        </div>
+
         <form id="formNuevoUsuario" onsubmit="guardarNuevoUsuario(event)" class="card p-3 mb-3 bg-light border-0">
-          <h6 class="fw-bold text-primary mb-3">Crear Nuevo Usuario</h6>
+          <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-user-plus me-1"></i>Crear Nuevo Usuario</h6>
           <div class="mb-2">
             <label class="form-label small fw-semibold">Nombre Completo</label>
-            <input type="text" id="nuNombre" class="form-control form-control-sm" required>
+            <input type="text" id="nuNombre" class="form-control form-control-sm"
+                   placeholder="Ej. María López" required>
           </div>
           <div class="mb-2">
             <label class="form-label small fw-semibold">Rol</label>
             <select id="nuRol" class="form-select form-select-sm" required>
-              <option value="Editor">Editor</option>
-              <option value="Administrador Secundario">Administrador Secundario</option>
+              <option value="Editor">Editor (puede crear y editar registros)</option>
+              <option value="Administrador Secundario">Administrador Secundario (permisos ampliados)</option>
             </select>
           </div>
           <div class="mb-3">
-            <label class="form-label small fw-semibold">Contraseña</label>
-            <input type="password" id="nuPassword" class="form-control form-control-sm" minlength="6" required>
+            <label class="form-label small fw-semibold">Contraseña asignada (mín. 6 caracteres)</label>
+            <input type="password" id="nuPassword" class="form-control form-control-sm"
+                   minlength="6" placeholder="Ej. temporal2025" required>
+            <div class="form-text small">Comparta esta contraseña con el usuario.</div>
           </div>
           <button type="submit" class="btn btn-action btn-sm w-100">
             <i class="fa-solid fa-user-plus me-1"></i>Registrar Usuario
           </button>
         </form>
+
         <h6 class="fw-bold mb-2">Usuarios Registrados</h6>
         <div class="table-responsive">
           <table class="table table-sm table-bordered">
@@ -386,6 +456,10 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
             <i class="fa-brands fa-whatsapp me-2"></i>Enviar por WhatsApp
           </button>
         </div>
+        <div class="form-text mt-2">
+          <i class="fa-solid fa-info-circle me-1"></i>
+          El mensaje incluye los enlaces a las fotos del equipo en Google Drive.
+        </div>
       </div>
     </div>
   </div>
@@ -394,9 +468,9 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 /* ============================================================
-   ⚙️ CONFIGURACIÓN — TU URL DE APPS SCRIPT YA ESTÁ INTEGRADA
+   CONFIGURACION - URL DE APPS SCRIPT (ACTUALIZADA)
    ============================================================ */
-const API_URL = 'https://script.google.com/macros/s/AKfycbz_Hv68BYSz23YavoUrL17b-h4wufOgv81gWK1F2_jHzFpHjPakgEIQ7a0AZv4XqTg6Ag/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzeL0YGAxOEqQmWMpCSdZiSFo_cZQn1_4ZvhWKq3E53eIBMPy9ICwioFsHaMLO_naxAkw/exec';
 
 /* ============================================================
    ESTADO GLOBAL
@@ -434,20 +508,22 @@ async function llamarAPI(accion, params) {
     return await response.json();
   } catch (err) {
     console.error('[API Error]', err);
-    return { exito: false, mensaje: 'Error de conexión: ' + err.message };
+    return { exito: false, mensaje: 'Error de conexion: ' + err.message };
   }
 }
 
 /* ============================================================
    UTILIDADES
    ============================================================ */
-function log() { try { console.log.apply(console, ['[ITH-JM]'].concat([].slice.call(arguments))); } catch (e) { } }
-function logError() { try { console.error.apply(console, ['[ITH-JM ERROR]'].concat([].slice.call(arguments))); } catch (e) { } }
+function log() { try { console.log.apply(console, ['[ITH-JM]'].concat([].slice.call(arguments))); } catch (e) {} }
+function logError() { try { console.error.apply(console, ['[ITH-JM ERROR]'].concat([].slice.call(arguments))); } catch (e) {} }
+
 function escapeHtml(t) {
   if (t === null || t === undefined) return '';
   return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
+
 function normalizarFecha(f) {
   if (!f) return '';
   if (typeof f === 'string') {
@@ -462,13 +538,21 @@ function normalizarFecha(f) {
   }
   return String(f);
 }
+
 function fechaLocalHoy() {
   const d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
+/* Convierte URL de Drive thumbnail a URL de vista directa */
+function convertirUrlDriveAView(url) {
+  const m = String(url).match(/[?&]id=([^&]+)/);
+  if (m) return 'https://drive.google.com/file/d/' + m[1] + '/view';
+  return url;
+}
+
 /* ============================================================
-   TELÉFONO HONDUREÑO
+   TELEFONO HONDUREÑO
    ============================================================ */
 function formatearTelefonoHN(input) {
   let v = input.value.replace(/\D/g, '').substring(0, 8);
@@ -492,7 +576,25 @@ function poblarInputTelefono(telGuardado) {
 }
 
 /* ============================================================
-   INICIALIZACIÓN
+   TOGGLE APARATO "OTRO"
+   ============================================================ */
+function toggleOtroAparato() {
+  const select = document.getElementById('formTipoAparato');
+  const container = document.getElementById('otroAparatoContainer');
+  const input = document.getElementById('formOtroAparato');
+  if (select.value === 'Otro') {
+    container.classList.remove('d-none');
+    input.required = true;
+    setTimeout(function () { input.focus(); }, 100);
+  } else {
+    container.classList.add('d-none');
+    input.required = false;
+    input.value = '';
+  }
+}
+
+/* ============================================================
+   INICIALIZACION
    ============================================================ */
 window.addEventListener('load', function () {
   try {
@@ -516,12 +618,14 @@ function verificarSesion() {
   }
   mostrarLogin();
 }
+
 function mostrarLogin() {
   document.getElementById('secLogin').classList.remove('d-none');
   document.getElementById('secDashboard').classList.add('d-none');
   const u = document.getElementById('userInfoSection');
   u.classList.add('d-none'); u.classList.remove('d-flex');
 }
+
 function mostrarInterfazPrincipal() {
   document.getElementById('secLogin').classList.add('d-none');
   document.getElementById('secDashboard').classList.remove('d-none');
@@ -529,11 +633,14 @@ function mostrarInterfazPrincipal() {
   u.classList.remove('d-none'); u.classList.add('d-flex');
   document.getElementById('loggedUserName').textContent = usuarioActual.nombre;
   document.getElementById('loggedUserRole').textContent = usuarioActual.rol;
+
+  // SOLO Administrador Principal ve el boton de crear usuarios
   if (usuarioActual.rol === 'Administrador Principal') {
     document.getElementById('btnGestionUsuarios').classList.remove('d-none');
   } else {
     document.getElementById('btnGestionUsuarios').classList.add('d-none');
   }
+
   generarPestanasAnios();
   cargarRegistrosPorAnio(anioSeleccionado);
 }
@@ -565,6 +672,7 @@ async function procesarLogin(e) {
     alertBox.classList.remove('d-none');
   }
 }
+
 function cerrarSesion() {
   sessionStorage.removeItem('ITH_JM_SESSION');
   usuarioActual = null;
@@ -606,6 +714,9 @@ function abrirModalRegistro() {
   document.getElementById('formUsuario').value = usuarioActual.nombre;
   document.getElementById('formFechaIngreso').value = fechaLocalHoy();
   document.getElementById('formTelefono').value = '';
+  document.getElementById('otroAparatoContainer').classList.add('d-none');
+  document.getElementById('formOtroAparato').value = '';
+  document.getElementById('formOtroAparato').required = false;
   fotosBase64Cargadas = [];
   document.getElementById('previewFotosContainer').innerHTML = '';
   document.getElementById('formFotos').value = '';
@@ -620,7 +731,11 @@ function validarYPrevisualizarFotos(input) {
   fotosBase64Cargadas = [];
 
   if (files.length === 0) return;
-  if (files.length > 4) { alert('Solo se permiten máximo 4 fotografías.'); input.value = ''; return; }
+  if (files.length > 4) {
+    alert('Solo se permiten máximo 4 fotografías.');
+    input.value = '';
+    return;
+  }
 
   const MAX_BYTES = 2 * 1024 * 1024;
   let aceptadas = 0;
@@ -646,18 +761,29 @@ function validarFormularioEquipo() {
   const dueno = g('formDueno');
   const telefonoRaw = g('formTelefono');
   const fechaIngreso = g('formFechaIngreso');
-  const tipoAparato = g('formTipoAparato');
+  const tipoAparatoSel = g('formTipoAparato');
+  const otroAparato = g('formOtroAparato');
   const estudiante = g('formEstudiante');
   const tecnico = g('formTecnico');
   const fallaInicial = g('formFallaInicial');
+
+  // Resolver tipo de aparato (si es "Otro", usar texto personalizado)
+  let tipoAparato = tipoAparatoSel;
+  if (tipoAparatoSel === 'Otro') {
+    if (!otroAparato) {
+      errores.push('• Especifique qué tipo de aparato es (campo "Otro")');
+    } else {
+      tipoAparato = otroAparato;
+    }
+  }
 
   if (!dueno) errores.push('• Nombre del dueño');
   if (!telefonoRaw) errores.push('• Teléfono celular');
   else if (!esTelefonoHNValido(telefonoRaw)) errores.push('• Teléfono hondureño inválido (8 dígitos, inicia con 3, 8 o 9)');
   if (!fechaIngreso) errores.push('• Fecha de ingreso');
-  if (!tipoAparato) errores.push('• Tipo de aparato');
+  if (!tipoAparatoSel) errores.push('• Tipo de aparato');
   if (!estudiante) errores.push('• Estudiante asignado');
-  if (!tecnico) errores.push('• Técnico responsable');
+  if (!tecnico) errores.push('• Docente/Técnico responsable');
   if (!fallaInicial) errores.push('• Falla inicial');
 
   const id = document.getElementById('equipoId').value;
@@ -707,11 +833,13 @@ async function guardarFormularioEquipo() {
   btn.disabled = false;
   btn.innerHTML = htmlOriginal;
 
-  try { bsModalRegistro.hide(); } catch (e) { }
+  try { bsModalRegistro.hide(); } catch (e) {}
   document.getElementById('formEquipo').reset();
   document.getElementById('equipoId').value = '';
   fotosBase64Cargadas = [];
   document.getElementById('previewFotosContainer').innerHTML = '';
+  document.getElementById('otroAparatoContainer').classList.add('d-none');
+  document.getElementById('formOtroAparato').value = '';
 
   setTimeout(function () {
     if (res && res.exito) {
@@ -824,16 +952,41 @@ function editarRegistro(id) {
   document.getElementById('equipoId').value = reg.id;
   document.getElementById('modalRegistroLabel').innerHTML =
     '<i class="fa-solid fa-pen-to-square me-2"></i>Editar Registro';
-  document.getElementById('formDueno').value            = reg.dueno || '';
+  document.getElementById('formDueno').value = reg.dueno || '';
   poblarInputTelefono(reg.telefono);
-  document.getElementById('formEstudiante').value       = reg.estudiante || '';
-  document.getElementById('formUsuario').value          = reg.usuario || '';
-  document.getElementById('formFechaIngreso').value     = normalizarFecha(reg.fechaIngreso);
-  document.getElementById('formTipoAparato').value      = reg.tipoAparato || '';
-  document.getElementById('formTecnico').value          = reg.tecnico || '';
-  document.getElementById('formFallaInicial').value     = reg.fallaInicial || '';
-  document.getElementById('formFechaEgreso').value      = normalizarFecha(reg.fechaEgreso);
-  document.getElementById('formCosto').value            = (reg.costo !== undefined ? reg.costo : '');
+  document.getElementById('formEstudiante').value = reg.estudiante || '';
+  document.getElementById('formUsuario').value = reg.usuario || '';
+  document.getElementById('formFechaIngreso').value = normalizarFecha(reg.fechaIngreso);
+
+  // Logica especial para el dropdown de aparato
+  const tipoSelect = document.getElementById('formTipoAparato');
+  const otroContainer = document.getElementById('otroAparatoContainer');
+  const otroInput = document.getElementById('formOtroAparato');
+  const tipoVal = reg.tipoAparato || '';
+  const opcionExiste = Array.from(tipoSelect.options).some(function (opt) {
+    return opt.value === tipoVal && tipoVal !== '';
+  });
+  if (opcionExiste) {
+    tipoSelect.value = tipoVal;
+    otroContainer.classList.add('d-none');
+    otroInput.value = '';
+    otroInput.required = false;
+  } else if (tipoVal) {
+    tipoSelect.value = 'Otro';
+    otroContainer.classList.remove('d-none');
+    otroInput.value = tipoVal;
+    otroInput.required = true;
+  } else {
+    tipoSelect.value = '';
+    otroContainer.classList.add('d-none');
+    otroInput.value = '';
+    otroInput.required = false;
+  }
+
+  document.getElementById('formTecnico').value = reg.tecnico || '';
+  document.getElementById('formFallaInicial').value = reg.fallaInicial || '';
+  document.getElementById('formFechaEgreso').value = normalizarFecha(reg.fechaEgreso);
+  document.getElementById('formCosto').value = (reg.costo !== undefined ? reg.costo : '');
   document.getElementById('formDiagnosticoFinal').value = reg.diagnosticoFinal || '';
 
   fotosBase64Cargadas = [];
@@ -883,14 +1036,14 @@ function generarPDF(tipo) {
     <tr><td class="lbl">Fecha de Ingreso:</td><td>${escapeHtml(reg.fechaIngreso || '')}</td></tr>
     <tr><td class="lbl">Falla Reportada:</td><td class="multiline">${escapeHtml(reg.fallaInicial || '')}</td></tr>
     <tr><td class="lbl">Estudiante Asignado:</td><td>${escapeHtml(reg.estudiante || '')}</td></tr>
-    <tr><td class="lbl">Técnico Responsable:</td><td>${escapeHtml(reg.tecnico || '')}</td></tr>`;
+    <tr><td class="lbl">Docente/Técnico Responsable:</td><td>${escapeHtml(reg.tecnico || '')}</td></tr>`;
   const bloqueEgreso = `
     <tr><td class="lbl">Fecha de Ingreso:</td><td>${escapeHtml(reg.fechaIngreso || '')}</td></tr>
     <tr><td class="lbl">Fecha de Egreso:</td><td>${escapeHtml(reg.fechaEgreso || '—')}</td></tr>
     <tr><td class="lbl">Falla Reportada:</td><td class="multiline">${escapeHtml(reg.fallaInicial || '')}</td></tr>
     <tr><td class="lbl">Diagnóstico Final:</td><td class="multiline">${escapeHtml(reg.diagnosticoFinal || '—')}</td></tr>
     <tr><td class="lbl">Estudiante Asignado:</td><td>${escapeHtml(reg.estudiante || '')}</td></tr>
-    <tr><td class="lbl">Técnico Responsable:</td><td>${escapeHtml(reg.tecnico || '')}</td></tr>
+    <tr><td class="lbl">Docente/Técnico Responsable:</td><td>${escapeHtml(reg.tecnico || '')}</td></tr>
     <tr class="total"><td class="lbl">COSTO:</td>
         <td><strong>L. ${(reg.costo || reg.costo === 0) ? parseFloat(reg.costo).toFixed(2) : '0.00'}</strong></td></tr>`;
 
@@ -942,7 +1095,7 @@ ${esEntrada
   : 'El equipo descrito ha sido entregado al cliente en las condiciones indicadas en este documento.'}
 </p></div>
 <div class="footer">
-  <div class="firma">Firma del Técnico</div>
+  <div class="firma">Firma del Docente/Técnico</div>
   <div class="firma">Firma del Cliente</div>
 </div>
 <div class="credito">
@@ -965,6 +1118,18 @@ function notificarCliente(canal) {
   if (tel8.length !== 8) { alert('El registro no tiene un teléfono hondureño válido.'); return; }
   const telInternacional = '+' + HN_CODIGO_PAIS + tel8;
 
+  // Construir bloque de fotos con enlaces de Drive
+  let fotosBloque = '';
+  if (reg.fotos) {
+    const arr = String(reg.fotos).split(',').filter(u => u.trim() !== '');
+    if (arr.length > 0) {
+      fotosBloque = '\n\nFotos del equipo en Google Drive:\n';
+      arr.forEach(function (url, i) {
+        fotosBloque += 'Foto ' + (i + 1) + ': ' + convertirUrlDriveAView(url.trim()) + '\n';
+      });
+    }
+  }
+
   const egresado = reg.fechaEgreso && String(reg.fechaEgreso).trim() !== '';
   let msg;
   if (!egresado) {
@@ -974,9 +1139,10 @@ function notificarCliente(canal) {
       '• Equipo: ' + (reg.tipoAparato || '-') + '\n' +
       '• Fecha ingreso: ' + (reg.fechaIngreso || '-') + '\n' +
       '• Falla: ' + (reg.fallaInicial || '-') + '\n' +
-      '• Tecnico: ' + (reg.tecnico || '-') + '\n' +
-      '• Estudiante: ' + (reg.estudiante || '-') + '\n\n' +
-      'Le notificaremos cuando el diagnostico este listo.\n\n' +
+      '• Docente/Tecnico: ' + (reg.tecnico || '-') + '\n' +
+      '• Estudiante: ' + (reg.estudiante || '-') + '\n' +
+      fotosBloque +
+      '\nLe notificaremos cuando el diagnostico este listo.\n\n' +
       'Gracias por su confianza.\nTaller de Electronica ITH JM\n' +
       'Creado por: Prof. Ricardo Cruz_Docente Innovador';
   } else {
@@ -987,9 +1153,10 @@ function notificarCliente(canal) {
       '• Fecha ingreso: ' + (reg.fechaIngreso || '-') + '\n' +
       '• Fecha egreso: ' + (reg.fechaEgreso || '-') + '\n' +
       '• Diagnostico final: ' + (reg.diagnosticoFinal || '-') + '\n' +
-      '• Tecnico: ' + (reg.tecnico || '-') + '\n' +
-      '• Costo: L. ' + (reg.costo ? parseFloat(reg.costo).toFixed(2) : '0.00') + '\n\n' +
-      'Puede pasar a retirarlo.\n\n' +
+      '• Docente/Tecnico: ' + (reg.tecnico || '-') + '\n' +
+      '• Costo: L. ' + (reg.costo ? parseFloat(reg.costo).toFixed(2) : '0.00') + '\n' +
+      fotosBloque +
+      '\nPuede pasar a retirarlo.\n\n' +
       'Gracias por su confianza.\nTaller de Electronica ITH JM\n' +
       'Creado por: Prof. Ricardo Cruz_Docente Innovador';
   }
@@ -997,8 +1164,9 @@ function notificarCliente(canal) {
   const msgEnc = encodeURIComponent(msg);
   const a = document.createElement('a');
   a.style.display = 'none';
-  if (canal === 'sms') a.href = 'sms:' + telInternacional + '?body=' + msgEnc;
-  else if (canal === 'wsp') {
+  if (canal === 'sms') {
+    a.href = 'sms:' + telInternacional + '?body=' + msgEnc;
+  } else if (canal === 'wsp') {
     a.href = 'https://wa.me/' + HN_CODIGO_PAIS + tel8 + '?text=' + msgEnc;
     a.target = '_blank'; a.rel = 'noopener';
   }
@@ -1014,6 +1182,7 @@ function abrirModalCambiarPass() {
   document.getElementById('cpAlert').classList.add('d-none');
   bsModalCambiarPass.show();
 }
+
 async function guardarNuevaContrasena(e) {
   e.preventDefault();
   const actual = document.getElementById('cpActual').value;
@@ -1043,7 +1212,7 @@ async function guardarNuevaContrasena(e) {
 }
 
 /* ============================================================
-   BÚSQUEDA / EXPORTAR
+   BUSQUEDA / EXPORTAR
    ============================================================ */
 function filtrarTabla() {
   const q = document.getElementById('inputBuscar').value.toLowerCase();
@@ -1051,9 +1220,10 @@ function filtrarTabla() {
     f.style.display = f.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 }
+
 function exportarCSV() {
   if (!listaRegistrosActuales || listaRegistrosActuales.length === 0) { alert('No hay datos.'); return; }
-  let csv = 'Dueño,Telefono,Estudiante,Usuario,Fecha_Ingreso,Tipo_Aparato,Falla_Inicial,Tecnico,Fecha_Egreso,Diagnostico_Final,Costo,Año\n';
+  let csv = 'Dueño,Telefono,Estudiante,Usuario,Fecha_Ingreso,Tipo_Aparato,Falla_Inicial,Docente_Tecnico,Fecha_Egreso,Diagnostico_Final,Costo,Año\n';
   listaRegistrosActuales.forEach(function (r) {
     csv += [
       '"' + (r.dueno || '') + '"', '"' + (r.telefono || '') + '"', '"' + (r.estudiante || '') + '"',
@@ -1071,13 +1241,18 @@ function exportarCSV() {
 }
 
 /* ============================================================
-   USUARIOS
+   USUARIOS (solo Administrador Principal)
    ============================================================ */
 function abrirModalUsuarios() {
+  if (!usuarioActual || usuarioActual.rol !== 'Administrador Principal') {
+    alert('Solo el Administrador Principal puede gestionar usuarios.');
+    return;
+  }
   document.getElementById('formNuevoUsuario').reset();
   cargarTablaUsuarios();
   bsModalUsuarios.show();
 }
+
 async function cargarTablaUsuarios() {
   const tbody = document.getElementById('tbodyUsuarios');
   tbody.innerHTML = '<tr><td colspan="2" class="text-muted text-center small">Cargando...</td></tr>';
@@ -1092,8 +1267,13 @@ async function cargarTablaUsuarios() {
     });
   }
 }
+
 async function guardarNuevoUsuario(e) {
   e.preventDefault();
+  if (!usuarioActual || usuarioActual.rol !== 'Administrador Principal') {
+    alert('Solo el Administrador Principal puede crear usuarios.');
+    return;
+  }
   const nombre = document.getElementById('nuNombre').value.trim();
   const rol = document.getElementById('nuRol').value;
   const pass = document.getElementById('nuPassword').value.trim();
