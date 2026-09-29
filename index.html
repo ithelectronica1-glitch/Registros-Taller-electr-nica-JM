@@ -57,26 +57,18 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 .btn-sms:hover{background:#218838!important;border-color:#1e7e34!important}
 .btn-wsp{background:#25D366!important;border-color:#25D366!important;color:#fff!important}
 .btn-wsp:hover{background:#1da851!important;border-color:#1da851!important}
+.btn-drive{background:#FFC107!important;border-color:#FFC107!important;color:#000!important;font-weight:700}
+.btn-drive:hover{background:#e0a800!important;border-color:#d39e00!important}
 .admin-note{background:#fff3cd;border-left:4px solid #ffc107;padding:.5rem .75rem;border-radius:6px;font-size:.82rem;color:#856404}
 
 /* === ESTILOS DE LA CAMARA === */
-#videoCamara{
-  width:100%;max-height:60vh;background:#000;border-radius:10px;object-fit:contain;
-}
-.camara-info-badge{
-  position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);color:#fff;
-  padding:4px 10px;border-radius:20px;font-size:.78rem;font-weight:600;
-}
-.camara-info-badge.rec::before{
-  content:'●';color:#ff3b30;margin-right:5px;animation:blink 1s infinite;
-}
+#videoCamara{width:100%;max-height:60vh;background:#000;border-radius:10px;object-fit:contain}
+.camara-info-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);color:#fff;padding:4px 10px;border-radius:20px;font-size:.78rem;font-weight:600}
+.camara-info-badge.rec::before{content:'●';color:#ff3b30;margin-right:5px;animation:blink 1s infinite}
 @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:.3}}
 #camaraContainer{position:relative;background:#000;border-radius:10px;overflow:hidden;min-height:200px;display:flex;align-items:center;justify-content:center}
 #camaraError{padding:2rem;text-align:center;color:#fff}
-.foto-counter{
-  background:#e8f0fe;color:var(--primary-blue);padding:3px 10px;border-radius:20px;
-  font-size:.78rem;font-weight:600;display:inline-block;margin-left:8px;
-}
+.foto-counter{background:#e8f0fe;color:var(--primary-blue);padding:3px 10px;border-radius:20px;font-size:.78rem;font-weight:600;display:inline-block;margin-left:8px}
 </style>
 </head>
 <body>
@@ -313,15 +305,12 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
             <input type="text" id="formTecnico" class="form-control" placeholder="Nombre del docente o técnico" required>
           </div>
 
-          <!-- ============================================== -->
-          <!-- SECCION DE FOTOGRAFIAS CON CAMARA INTEGRADA    -->
-          <!-- ============================================== -->
+          <!-- SECCION DE FOTOGRAFIAS CON CAMARA INTEGRADA -->
           <div class="col-12">
             <label class="form-label fw-semibold">
               Fotografías del Aparato *
               <span class="foto-counter" id="fotoCounter">0 / 4</span>
             </label>
-
             <div class="row g-2">
               <div class="col-12 col-md-6">
                 <label for="formFotos" class="form-label small text-muted mb-1">
@@ -340,13 +329,13 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
                 </button>
               </div>
             </div>
-
             <div class="form-text small mt-2">
-              Máximo 4 fotos en total. Máx. 2 MB por foto. Puede combinar archivos adjuntos y fotos de cámara.
+              Máximo 4 fotos. Máx. 2 MB por foto.
+              <i class="fa-solid fa-folder-tree ms-1"></i>
+              Se guardarán en una subcarpeta única dentro de <strong>"Registro de Taller"</strong> en Drive.
             </div>
             <div id="previewFotosContainer" class="preview-container"></div>
           </div>
-          <!-- ============================================== -->
 
           <div class="col-12">
             <label for="formFallaInicial" class="form-label fw-semibold">Diagnóstico o Falla Inicial *</label>
@@ -382,9 +371,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
   </div>
 </div>
 
-<!-- ============================================== -->
-<!-- MODAL CAMARA                                   -->
-<!-- ============================================== -->
+<!-- MODAL CAMARA -->
 <div class="modal fade" id="modalCamara" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
@@ -395,7 +382,6 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
         <button type="button" class="btn-close btn-close-white" onclick="cerrarCamara()"></button>
       </div>
       <div class="modal-body p-2">
-
         <div id="camaraContainer">
           <span class="camara-info-badge rec" id="camaraInfoBadge">EN VIVO</span>
           <video id="videoCamara" autoplay playsinline muted></video>
@@ -408,14 +394,12 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
           </div>
           <canvas id="canvasCamara" class="d-none"></canvas>
         </div>
-
         <div class="text-center mt-3">
           <button type="button" id="btnAlternarCamara" class="btn btn-outline-light btn-sm d-none"
                   onclick="alternarCamara()" title="Cambiar cámara frontal/trasera">
             <i class="fa-solid fa-camera-rotate me-1"></i>Cambiar cámara
           </button>
         </div>
-
         <div class="text-center text-muted small mt-2">
           Presione <strong>Capturar</strong> cuando la imagen esté lista.
           <br>Fotos capturadas: <strong id="fotosCapturadasContador">0</strong> / 4
@@ -433,7 +417,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
   </div>
 </div>
 
-<!-- MODAL USUARIOS (SOLO ADMINISTRADOR PRINCIPAL) -->
+<!-- MODAL USUARIOS -->
 <div class="modal fade" id="modalUsuarios" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-md modal-dialog-scrollable">
     <div class="modal-content">
@@ -446,7 +430,6 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
           <i class="fa-solid fa-lock me-1"></i>
           <strong>Solo el Administrador Principal</strong> (Ricardo Cruz) puede crear usuarios y asignarles contraseña.
         </div>
-
         <form id="formNuevoUsuario" onsubmit="guardarNuevoUsuario(event)" class="card p-3 mb-3 bg-light border-0">
           <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-user-plus me-1"></i>Crear Nuevo Usuario</h6>
           <div class="mb-2">
@@ -471,7 +454,6 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
             <i class="fa-solid fa-user-plus me-1"></i>Registrar Usuario
           </button>
         </form>
-
         <h6 class="fw-bold mb-2">Usuarios Registrados</h6>
         <div class="table-responsive">
           <table class="table table-sm table-bordered">
@@ -561,7 +543,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
         </div>
         <div class="form-text mt-2">
           <i class="fa-solid fa-info-circle me-1"></i>
-          El mensaje incluye los enlaces a las fotos del equipo en Google Drive.
+          El mensaje incluye los enlaces a las fotos y a la carpeta de Drive.
         </div>
       </div>
     </div>
@@ -585,9 +567,8 @@ let fotosBase64Cargadas = [];
 let registroSeleccionadoParaInforme = null;
 let guardandoRegistro = false;
 
-// Estado de la cámara
 let camaraStream = null;
-let camaraFacingMode = 'environment'; // 'environment' = trasera, 'user' = frontal
+let camaraFacingMode = 'environment';
 let camaraActiva = false;
 
 let bsModalRegistro, bsModalUsuarios, bsModalFotos, bsModalInforme, bsModalCambiarPass, bsModalCamara;
@@ -701,7 +682,7 @@ function toggleOtroAparato() {
 }
 
 /* ============================================================
-   PREVISUALIZACION DE FOTOS (adjuntas + camara)
+   PREVISUALIZACION DE FOTOS
    ============================================================ */
 function actualizarPreviewFotos() {
   const cont = document.getElementById('previewFotosContainer');
@@ -717,7 +698,6 @@ function actualizarPreviewFotos() {
     img.title = foto.name;
     wrapper.appendChild(img);
 
-    // Etiqueta de origen
     if (foto.origen === 'camara') {
       const badge = document.createElement('span');
       badge.className = 'preview-thumb-badge';
@@ -725,7 +705,6 @@ function actualizarPreviewFotos() {
       wrapper.appendChild(badge);
     }
 
-    // Botón eliminar
     const del = document.createElement('button');
     del.type = 'button';
     del.className = 'preview-thumb-del';
@@ -737,15 +716,12 @@ function actualizarPreviewFotos() {
     cont.appendChild(wrapper);
   });
 
-  // Actualizar contador
   const counter = document.getElementById('fotoCounter');
   counter.textContent = fotosBase64Cargadas.length + ' / 4';
 
-  // Actualizar contador dentro del modal de cámara
   const camCont = document.getElementById('fotosCapturadasContador');
   if (camCont) camCont.textContent = fotosBase64Cargadas.length;
 
-  // Habilitar/deshabilitar botón de tomar foto
   const btnAbrir = document.getElementById('btnAbrirCamara');
   if (btnAbrir) {
     if (fotosBase64Cargadas.length >= 4) {
@@ -762,10 +738,8 @@ function eliminarFoto(index) {
   if (index < 0 || index >= fotosBase64Cargadas.length) return;
   fotosBase64Cargadas.splice(index, 1);
   actualizarPreviewFotos();
-  log('Foto eliminada. Total:', fotosBase64Cargadas.length);
 }
 
-/* Validación de fotos desde input file */
 function validarYPrevisualizarFotos(input) {
   const files = Array.from(input.files);
   if (files.length === 0) return;
@@ -794,8 +768,6 @@ function validarYPrevisualizarFotos(input) {
       alert('"' + file.name + '" supera los 2 MB.');
       continue;
     }
-
-    // Leer el archivo de forma sincrónica al final para contar bien
     const reader = new FileReader();
     reader.onload = (function (fname) {
       return function (ev) {
@@ -805,50 +777,35 @@ function validarYPrevisualizarFotos(input) {
           origen: 'archivo'
         });
         actualizarPreviewFotos();
-        log('Foto adjunta:', fname);
       };
     })(file.name);
     reader.readAsDataURL(file);
     agregadas++;
   }
-
-  // Limpiar el input para poder subir la misma foto de nuevo si se elimina
   setTimeout(function () { input.value = ''; }, 300);
-
-  if (agregadas === 0 && files.length > 0) {
-    log('Ninguna foto fue agregada');
-  }
 }
 
 /* ============================================================
-   CAMARA - ABRIR / CERRAR / CAPTURAR
+   CAMARA
    ============================================================ */
-
-/** Verifica si el navegador soporta getUserMedia */
 function soportaCamara() {
   return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 }
 
-/** Abre el modal de la cámara y comienza el streaming */
 async function abrirCamara() {
   if (fotosBase64Cargadas.length >= 4) {
     alert('Ya alcanzó el máximo de 4 fotografías.');
     return;
   }
-
   if (!soportaCamara()) {
     alert('Este navegador no soporta el acceso a la cámara.\n\n' +
           'Sugerencias:\n' +
           '• Use Chrome, Edge, Safari o Firefox actualizado\n' +
           '• Asegúrese de estar en HTTPS (GitHub Pages lo cumple)\n' +
-          '• En iOS use Safari (no todos los navegadores soportan cámara)');
+          '• En iOS use Safari');
     return;
   }
-
-  // Mostrar el modal primero
   bsModalCamara.show();
-
-  // Resetear UI
   const video = document.getElementById('videoCamara');
   const errorDiv = document.getElementById('camaraError');
   const badge = document.getElementById('camaraInfoBadge');
@@ -858,58 +815,34 @@ async function abrirCamara() {
   errorDiv.classList.add('d-none');
   badge.classList.remove('d-none');
 
-  // Iniciar la cámara
   await iniciarCamara();
 
-  // Mostrar botón de alternar si hay más de una cámara
   if (camaraActiva) {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const camaras = devices.filter(d => d.kind === 'videoinput');
-    if (camaras.length > 1) {
-      btnAlternar.classList.remove('d-none');
-    } else {
-      btnAlternar.classList.add('d-none');
-    }
+    if (camaras.length > 1) btnAlternar.classList.remove('d-none');
+    else btnAlternar.classList.add('d-none');
   }
-
-  // Actualizar contador de fotos capturadas
   document.getElementById('fotosCapturadasContador').textContent = fotosBase64Cargadas.length;
 }
 
-/** Inicia o reinicia el streaming de la cámara */
 async function iniciarCamara() {
   const video = document.getElementById('videoCamara');
-
-  // Detener cualquier stream previo
   if (camaraStream) {
     camaraStream.getTracks().forEach(t => t.stop());
     camaraStream = null;
   }
-
   try {
     const constraints = {
-      video: {
-        facingMode: { ideal: camaraFacingMode },
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
-      },
+      video: { facingMode: { ideal: camaraFacingMode }, width: { ideal: 1280 }, height: { ideal: 720 } },
       audio: false
     };
-
     camaraStream = await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject = camaraStream;
-
-    // Esperar a que el video esté listo
     await new Promise(function (resolve) {
-      video.onloadedmetadata = function () {
-        video.play().catch(function () {});
-        resolve();
-      };
+      video.onloadedmetadata = function () { video.play().catch(function () {}); resolve(); };
     });
-
     camaraActiva = true;
-    log('Cámara iniciada. facingMode:', camaraFacingMode);
-
   } catch (err) {
     logError('Error al iniciar cámara:', err);
     camaraActiva = false;
@@ -917,7 +850,6 @@ async function iniciarCamara() {
   }
 }
 
-/** Muestra un mensaje de error si la cámara no está disponible */
 function mostrarErrorCamara(err) {
   const video = document.getElementById('videoCamara');
   const errorDiv = document.getElementById('camaraError');
@@ -936,7 +868,7 @@ function mostrarErrorCamara(err) {
     } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
       msg = 'No se encontró ninguna cámara en este dispositivo.';
     } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
-      msg = 'La cámara está siendo usada por otra aplicación. Ciérrela e inténtelo de nuevo.';
+      msg = 'La cámara está siendo usada por otra aplicación.';
     } else if (err.name === 'OverconstrainedError') {
       msg = 'Las restricciones solicitadas no coinciden con ninguna cámara disponible.';
     } else if (err.message) {
@@ -946,74 +878,47 @@ function mostrarErrorCamara(err) {
   document.getElementById('camaraErrorMsg').textContent = msg;
 }
 
-/** Alterna entre cámara frontal y trasera */
 async function alternarCamara() {
   camaraFacingMode = (camaraFacingMode === 'environment') ? 'user' : 'environment';
-  log('Alternando cámara a:', camaraFacingMode);
   await iniciarCamara();
 }
 
-/** Captura la foto del video y la agrega a la lista */
 function capturarFoto() {
-  if (!camaraActiva) {
-    alert('La cámara no está activa.');
-    return;
-  }
-
+  if (!camaraActiva) { alert('La cámara no está activa.'); return; }
   if (fotosBase64Cargadas.length >= 4) {
     alert('Ya alcanzó el máximo de 4 fotografías.');
     cerrarCamara();
     return;
   }
-
   const video = document.getElementById('videoCamara');
   const canvas = document.getElementById('canvasCamara');
-
-  // Dimensiones reales del video
   const w = video.videoWidth || 1280;
   const h = video.videoHeight || 720;
-
   canvas.width = w;
   canvas.height = h;
-
   const ctx = canvas.getContext('2d');
-
-  // Espejar si es cámara frontal (para que se vea natural)
   if (camaraFacingMode === 'user') {
     ctx.translate(w, 0);
     ctx.scale(-1, 1);
   }
-
   ctx.drawImage(video, 0, 0, w, h);
 
-  // Convertir a base64 JPEG con calidad 0.85
   let dataUrl;
-  try {
-    dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-  } catch (e) {
-    logError('Error al convertir canvas a imagen:', e);
-    alert('No se pudo procesar la imagen. Intente de nuevo.');
-    return;
-  }
+  try { dataUrl = canvas.toDataURL('image/jpeg', 0.85); }
+  catch (e) { alert('No se pudo procesar la imagen.'); return; }
 
-  // Verificar peso aproximado (base64 ≈ 1.37x bytes reales)
-  const pesoAprox = (dataUrl.length * 0.75) / 1024 / 1024; // MB
+  const pesoAprox = (dataUrl.length * 0.75) / 1024 / 1024;
   if (pesoAprox > 2.5) {
-    alert('La foto pesa aproximadamente ' + pesoAprox.toFixed(2) + ' MB, mayor al límite de 2 MB. Acérquese al equipo para reducir el tamaño.');
+    alert('La foto pesa ' + pesoAprox.toFixed(2) + ' MB, mayor al límite de 2 MB. Acérquese al equipo.');
     return;
   }
-
-  const nombre = 'camara_' + Date.now() + '.jpg';
-
   fotosBase64Cargadas.push({
     data: dataUrl,
-    name: nombre,
+    name: 'camara_' + Date.now() + '.jpg',
     origen: 'camara'
   });
-
   actualizarPreviewFotos();
 
-  // Animación de captura (flash blanco)
   const container = document.getElementById('camaraContainer');
   const flash = document.createElement('div');
   flash.style.cssText = 'position:absolute;inset:0;background:#fff;opacity:.9;transition:opacity .3s;pointer-events:none;';
@@ -1021,9 +926,6 @@ function capturarFoto() {
   setTimeout(function () { flash.style.opacity = '0'; }, 30);
   setTimeout(function () { if (flash.parentNode) flash.parentNode.removeChild(flash); }, 350);
 
-  log('Foto capturada:', nombre, '(' + pesoAprox.toFixed(2) + ' MB aprox)');
-
-  // Si ya llegó a 4, cerrar la cámara automáticamente
   if (fotosBase64Cargadas.length >= 4) {
     setTimeout(function () {
       alert('Ha alcanzado el máximo de 4 fotografías. Se cerrará la cámara.');
@@ -1032,19 +934,15 @@ function capturarFoto() {
   }
 }
 
-/** Cierra la cámara y detiene el stream */
 function cerrarCamara() {
   if (camaraStream) {
     camaraStream.getTracks().forEach(function (track) { track.stop(); });
     camaraStream = null;
   }
   camaraActiva = false;
-
   const video = document.getElementById('videoCamara');
   if (video) video.srcObject = null;
-
   try { bsModalCamara.hide(); } catch (e) {}
-  log('Cámara cerrada');
 }
 
 /* ============================================================
@@ -1059,20 +957,14 @@ window.addEventListener('load', function () {
     bsModalCambiarPass = new bootstrap.Modal(document.getElementById('modalCambiarPass'));
     bsModalCamara      = new bootstrap.Modal(document.getElementById('modalCamara'), { backdrop: 'static', keyboard: false });
 
-    // Detener la cámara cuando se cierre el modal (por cualquier motivo)
     document.getElementById('modalCamara').addEventListener('hidden.bs.modal', function () {
       if (camaraStream) {
         camaraStream.getTracks().forEach(function (track) { track.stop(); });
         camaraStream = null;
         camaraActiva = false;
-        log('Cámara detenida al cerrar el modal');
       }
     });
-
-    log('App lista. API:', API_URL);
-  } catch (e) {
-    logError('Error al inicializar modales:', e);
-  }
+  } catch (e) { logError('Error al inicializar modales:', e); }
   verificarSesion();
 });
 
@@ -1105,7 +997,6 @@ function mostrarInterfazPrincipal() {
   } else {
     document.getElementById('btnGestionUsuarios').classList.add('d-none');
   }
-
   generarPestanasAnios();
   cargarRegistrosPorAnio(anioSeleccionado);
 }
@@ -1139,7 +1030,6 @@ async function procesarLogin(e) {
 }
 
 function cerrarSesion() {
-  // Detener cámara si está activa
   if (camaraStream) {
     camaraStream.getTracks().forEach(function (track) { track.stop(); });
     camaraStream = null;
@@ -1208,11 +1098,8 @@ function validarFormularioEquipo() {
 
   let tipoAparato = tipoAparatoSel;
   if (tipoAparatoSel === 'Otro') {
-    if (!otroAparato) {
-      errores.push('• Especifique qué tipo de aparato es (campo "Otro")');
-    } else {
-      tipoAparato = otroAparato;
-    }
+    if (!otroAparato) errores.push('• Especifique qué tipo de aparato es (campo "Otro")');
+    else tipoAparato = otroAparato;
   }
 
   if (!dueno) errores.push('• Nombre del dueño');
@@ -1335,9 +1222,18 @@ function renderizarTablaRegistros(res) {
       }
     }
 
+    let btnCarpeta = '';
+    if (reg.carpetaUrl) {
+      btnCarpeta = '<button class="btn btn-sm btn-drive" ' +
+        'onclick="abrirCarpetaDrive(decodeURIComponent(\'' + encodeURIComponent(reg.carpetaUrl) + '\'))" ' +
+        'title="Abrir carpeta de este registro en Google Drive">' +
+        '<i class="fa-brands fa-google-drive"></i></button>';
+    }
+
     let acciones = '<div class="action-btns d-flex flex-wrap justify-content-center">' +
       '<button class="btn btn-sm btn-action" onclick="abrirModalInforme(\'' + reg.id + '\')" title="Informe">' +
         '<i class="fa-solid fa-file-pdf"></i></button>' +
+      btnCarpeta +
       '<button class="btn btn-sm btn-outline-primary" onclick="editarRegistro(\'' + reg.id + '\')" title="Editar">' +
         '<i class="fa-solid fa-pen-to-square"></i></button>';
     if (esAdmin) {
@@ -1366,6 +1262,11 @@ function renderizarTablaRegistros(res) {
       '<td class="text-center">' + acciones + '</td>';
     tbody.appendChild(tr);
   });
+}
+
+function abrirCarpetaDrive(url) {
+  if (!url) { alert('Este registro no tiene carpeta asociada.'); return; }
+  window.open(url, '_blank', 'noopener');
 }
 
 function verFotosModal(cadenaUrls) {
@@ -1434,7 +1335,7 @@ function editarRegistro(id) {
 }
 
 async function eliminarRegistroConfirm(id) {
-  if (!confirm('¿Eliminar este registro? No se puede deshacer.')) return;
+  if (!confirm('¿Eliminar este registro? La carpeta de fotos también se moverá a la papelera de Drive.')) return;
   const res = await llamarAPI('eliminarRegistro', { id: id });
   alert((res && res.mensaje) || 'Eliminado.');
   cargarRegistrosPorAnio(anioSeleccionado);
@@ -1449,13 +1350,20 @@ function abrirModalInforme(id) {
   registroSeleccionadoParaInforme = reg;
 
   const egresado = reg.fechaEgreso && String(reg.fechaEgreso).trim() !== '';
-  document.getElementById('infoResumenReg').innerHTML =
+  let resumenHTML =
     '<strong>Cliente:</strong> ' + escapeHtml(reg.dueno || '-') +
     '<br><strong>Teléfono:</strong> ' + escapeHtml(reg.telefono || '-') +
     '<br><strong>Equipo:</strong> ' + escapeHtml(reg.tipoAparato || '-') +
     '<br><strong>Estado:</strong> ' +
     (egresado ? '<span class="badge bg-success">Entregado</span>'
               : '<span class="badge bg-warning text-dark">En Taller</span>');
+
+  if (reg.carpetaUrl) {
+    resumenHTML += '<br><strong>Carpeta Drive:</strong> ' +
+      '<a href="' + escapeHtml(reg.carpetaUrl) + '" target="_blank" rel="noopener">' +
+      '<i class="fa-brands fa-google-drive"></i> Abrir</a>';
+  }
+  document.getElementById('infoResumenReg').innerHTML = resumenHTML;
   bsModalInforme.show();
 }
 
@@ -1483,6 +1391,11 @@ function generarPDF(tipo) {
     <tr><td class="lbl">Docente/Técnico Responsable:</td><td>${escapeHtml(reg.tecnico || '')}</td></tr>
     <tr class="total"><td class="lbl">COSTO:</td>
         <td><strong>L. ${(reg.costo || reg.costo === 0) ? parseFloat(reg.costo).toFixed(2) : '0.00'}</strong></td></tr>`;
+
+  const bloqueCarpeta = reg.carpetaUrl
+    ? `<tr><td class="lbl">Carpeta de fotos:</td><td style="word-break:break-all;font-size:11px">
+        <a href="${escapeHtml(reg.carpetaUrl)}">${escapeHtml(reg.carpetaUrl)}</a></td></tr>`
+    : '';
 
   const logo = 'https://placehold.co/120x120/1A73E8/FFFFFF?text=ITH+JM';
   const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${titulo}</title>
@@ -1524,6 +1437,7 @@ tr.total{background:#f1f7fe;font-size:15px}
   <tr><td class="lbl">Tipo de Aparato:</td><td>${escapeHtml(reg.tipoAparato || '')}</td></tr>
   ${esEntrada ? bloqueEntrada : bloqueEgreso}
   <tr><td class="lbl">Registrado por:</td><td>${escapeHtml(reg.usuario || '')}</td></tr>
+  ${bloqueCarpeta}
 </table></div>
 <div class="seccion"><h3>Observaciones</h3>
 <p style="font-size:12px;color:#555">
@@ -1560,6 +1474,9 @@ function notificarCliente(canal) {
     const arr = String(reg.fotos).split(',').filter(u => u.trim() !== '');
     if (arr.length > 0) {
       fotosBloque = '\n\nFotos del equipo en Google Drive:\n';
+      if (reg.carpetaUrl) {
+        fotosBloque += 'Carpeta completa: ' + reg.carpetaUrl + '\n';
+      }
       arr.forEach(function (url, i) {
         fotosBloque += 'Foto ' + (i + 1) + ': ' + convertirUrlDriveAView(url.trim()) + '\n';
       });
@@ -1659,14 +1576,14 @@ function filtrarTabla() {
 
 function exportarCSV() {
   if (!listaRegistrosActuales || listaRegistrosActuales.length === 0) { alert('No hay datos.'); return; }
-  let csv = 'Dueño,Telefono,Estudiante,Usuario,Fecha_Ingreso,Tipo_Aparato,Falla_Inicial,Docente_Tecnico,Fecha_Egreso,Diagnostico_Final,Costo,Año\n';
+  let csv = 'Dueño,Telefono,Estudiante,Usuario,Fecha_Ingreso,Tipo_Aparato,Falla_Inicial,Docente_Tecnico,Fecha_Egreso,Diagnostico_Final,Costo,Año,Carpeta_Drive\n';
   listaRegistrosActuales.forEach(function (r) {
     csv += [
       '"' + (r.dueno || '') + '"', '"' + (r.telefono || '') + '"', '"' + (r.estudiante || '') + '"',
       '"' + (r.usuario || '') + '"', '"' + (r.fechaIngreso || '') + '"', '"' + (r.tipoAparato || '') + '"',
       '"' + String(r.fallaInicial || '').replace(/"/g, '""') + '"', '"' + (r.tecnico || '') + '"',
       '"' + (r.fechaEgreso || '') + '"', '"' + String(r.diagnosticoFinal || '').replace(/"/g, '""') + '"',
-      '"' + (r.costo || '') + '"', '"' + (r.anio || '') + '"'
+      '"' + (r.costo || '') + '"', '"' + (r.anio || '') + '"', '"' + (r.carpetaUrl || '') + '"'
     ].join(',') + '\n';
   });
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
