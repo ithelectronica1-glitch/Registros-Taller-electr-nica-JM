@@ -305,7 +305,6 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
             <input type="text" id="formTecnico" class="form-control" placeholder="Nombre del docente o técnico" required>
           </div>
 
-          <!-- SECCION DE FOTOGRAFIAS CON CAMARA INTEGRADA -->
           <div class="col-12">
             <label class="form-label fw-semibold">
               Fotografías del Aparato *
@@ -553,9 +552,9 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 /* ============================================================
-   CONFIGURACION - URL DE APPS SCRIPT
+   CONFIGURACION - URL DE APPS SCRIPT (ACTUALIZADA)
    ============================================================ */
-const API_URL = 'https://script.google.com/macros/s/AKfycbzeL0YGAxOEqQmWMpCSdZiSFo_cZQn1_4ZvhWKq3E53eIBMPy9ICwioFsHaMLO_naxAkw/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwrL9YNarMAV3B4ibRgdQmU6GNAqgBRzGDZC4EhOe5-hmWMB2MkEeXhh3EDZoo3PZtcsA/exec';
 
 /* ============================================================
    ESTADO GLOBAL
@@ -755,7 +754,6 @@ function validarYPrevisualizarFotos(input) {
   }
 
   const MAX_BYTES = 2 * 1024 * 1024;
-  let agregadas = 0;
   const limite = Math.min(files.length, disponibles);
 
   for (let i = 0; i < limite; i++) {
@@ -780,7 +778,6 @@ function validarYPrevisualizarFotos(input) {
       };
     })(file.name);
     reader.readAsDataURL(file);
-    agregadas++;
   }
   setTimeout(function () { input.value = ''; }, 300);
 }
@@ -964,6 +961,7 @@ window.addEventListener('load', function () {
         camaraActiva = false;
       }
     });
+    log('App lista. API:', API_URL);
   } catch (e) { logError('Error al inicializar modales:', e); }
   verificarSesion();
 });
