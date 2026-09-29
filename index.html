@@ -60,8 +60,6 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 .btn-drive{background:#FFC107!important;border-color:#FFC107!important;color:#000!important;font-weight:700}
 .btn-drive:hover{background:#e0a800!important;border-color:#d39e00!important}
 .admin-note{background:#fff3cd;border-left:4px solid #ffc107;padding:.5rem .75rem;border-radius:6px;font-size:.82rem;color:#856404}
-
-/* === ESTILOS DE LA CAMARA === */
 #videoCamara{width:100%;max-height:60vh;background:#000;border-radius:10px;object-fit:contain}
 .camara-info-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);color:#fff;padding:4px 10px;border-radius:20px;font-size:.78rem;font-weight:600}
 .camara-info-badge.rec::before{content:'●';color:#ff3b30;margin-right:5px;animation:blink 1s infinite}
@@ -93,7 +91,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
           <span id="loggedUserRole" class="badge badge-role small">--</span>
         </div>
         <button id="btnGestionUsuarios" class="btn btn-outline-custom btn-sm d-none"
-                onclick="abrirModalUsuarios()" title="Gestión de Usuarios (solo Administrador Principal)">
+                onclick="abrirModalUsuarios()" title="Gestión de Usuarios">
           <i class="fa-solid fa-users-gear me-1"></i>Crear Usuario
         </button>
         <button id="btnCambiarPass" class="btn btn-outline-custom btn-sm"
@@ -304,7 +302,6 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
             <label for="formTecnico" class="form-label fw-semibold">Docente/Técnico Responsable *</label>
             <input type="text" id="formTecnico" class="form-control" placeholder="Nombre del docente o técnico" required>
           </div>
-
           <div class="col-12">
             <label class="form-label fw-semibold">
               Fotografías del Aparato *
@@ -335,7 +332,6 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
             </div>
             <div id="previewFotosContainer" class="preview-container"></div>
           </div>
-
           <div class="col-12">
             <label for="formFallaInicial" class="form-label fw-semibold">Diagnóstico o Falla Inicial *</label>
             <textarea id="formFallaInicial" class="form-control" rows="2"
@@ -375,9 +371,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header bg-dark text-white">
-        <h5 class="modal-title fw-bold">
-          <i class="fa-solid fa-camera me-2"></i>Tomar Fotografía
-        </h5>
+        <h5 class="modal-title fw-bold"><i class="fa-solid fa-camera me-2"></i>Tomar Fotografía</h5>
         <button type="button" class="btn-close btn-close-white" onclick="cerrarCamara()"></button>
       </div>
       <div class="modal-body p-2">
@@ -387,9 +381,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
           <div id="camaraError" class="d-none">
             <i class="fa-solid fa-video-slash fa-3x mb-3"></i>
             <h6 class="fw-bold">No se pudo acceder a la cámara</h6>
-            <p class="small mb-0" id="camaraErrorMsg">
-              Verifique los permisos de cámara en su navegador.
-            </p>
+            <p class="small mb-0" id="camaraErrorMsg">Verifique los permisos de cámara.</p>
           </div>
           <canvas id="canvasCamara" class="d-none"></canvas>
         </div>
@@ -427,27 +419,25 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
       <div class="modal-body">
         <div class="admin-note mb-3">
           <i class="fa-solid fa-lock me-1"></i>
-          <strong>Solo el Administrador Principal</strong> (Ricardo Cruz) puede crear usuarios y asignarles contraseña.
+          <strong>Solo el Administrador Principal</strong> (Ricardo Cruz) puede crear usuarios.
         </div>
         <form id="formNuevoUsuario" onsubmit="guardarNuevoUsuario(event)" class="card p-3 mb-3 bg-light border-0">
           <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-user-plus me-1"></i>Crear Nuevo Usuario</h6>
           <div class="mb-2">
             <label class="form-label small fw-semibold">Nombre Completo</label>
-            <input type="text" id="nuNombre" class="form-control form-control-sm"
-                   placeholder="Ej. María López" required>
+            <input type="text" id="nuNombre" class="form-control form-control-sm" placeholder="Ej. María López" required>
           </div>
           <div class="mb-2">
             <label class="form-label small fw-semibold">Rol</label>
             <select id="nuRol" class="form-select form-select-sm" required>
-              <option value="Editor">Editor (puede crear y editar registros)</option>
-              <option value="Administrador Secundario">Administrador Secundario (permisos ampliados)</option>
+              <option value="Editor">Editor (crear y editar registros)</option>
+              <option value="Administrador Secundario">Administrador Secundario</option>
             </select>
           </div>
           <div class="mb-3">
             <label class="form-label small fw-semibold">Contraseña asignada (mín. 6 caracteres)</label>
             <input type="password" id="nuPassword" class="form-control form-control-sm"
                    minlength="6" placeholder="Ej. temporal2025" required>
-            <div class="form-text small">Comparta esta contraseña con el usuario.</div>
           </div>
           <button type="submit" class="btn btn-action btn-sm w-100">
             <i class="fa-solid fa-user-plus me-1"></i>Registrar Usuario
@@ -552,7 +542,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 /* ============================================================
-   CONFIGURACION - URL DE APPS SCRIPT (ACTUALIZADA)
+   CONFIGURACION - URL DE APPS SCRIPT
    ============================================================ */
 const API_URL = 'https://script.google.com/macros/s/AKfycbwrL9YNarMAV3B4ibRgdQmU6GNAqgBRzGDZC4EhOe5-hmWMB2MkEeXhh3EDZoo3PZtcsA/exec';
 
@@ -656,10 +646,25 @@ function formatearTelefonoHNCompleto(tel) {
   if (d.length !== 8) return '';
   return HN_PREFIJO_MOSTRAR + ' ' + d.substring(0, 4) + '-' + d.substring(4);
 }
+
 function poblarInputTelefono(telGuardado) {
   const input = document.getElementById('formTelefono');
-  const d = extraer8Digitos(telGuardado);
-  input.value = d.length === 8 ? d.substring(0, 4) + '-' + d.substring(4) : '';
+  if (!input) return;
+  if (!telGuardado) { input.value = ''; return; }
+
+  let telLimpio = String(telGuardado);
+  if (telLimpio.charAt(0) === "'") telLimpio = telLimpio.substring(1);
+
+  const soloDigitos = telLimpio.replace(/\D/g, '');
+  const ultimos8 = soloDigitos.slice(-8);
+
+  if (ultimos8.length === 8) {
+    input.value = ultimos8.substring(0, 4) + '-' + ultimos8.substring(4);
+  } else if (soloDigitos.length > 0) {
+    input.value = soloDigitos;
+  } else {
+    input.value = '';
+  }
 }
 
 /* ============================================================
@@ -723,13 +728,7 @@ function actualizarPreviewFotos() {
 
   const btnAbrir = document.getElementById('btnAbrirCamara');
   if (btnAbrir) {
-    if (fotosBase64Cargadas.length >= 4) {
-      btnAbrir.disabled = true;
-      btnAbrir.title = 'Ya alcanzó el máximo de 4 fotos';
-    } else {
-      btnAbrir.disabled = false;
-      btnAbrir.title = '';
-    }
+    btnAbrir.disabled = fotosBase64Cargadas.length >= 4;
   }
 }
 
@@ -745,12 +744,12 @@ function validarYPrevisualizarFotos(input) {
 
   const disponibles = 4 - fotosBase64Cargadas.length;
   if (disponibles <= 0) {
-    alert('Ya alcanzó el máximo de 4 fotografías. Elimine alguna para agregar más.');
+    alert('Ya alcanzó el máximo de 4 fotografías.');
     input.value = '';
     return;
   }
   if (files.length > disponibles) {
-    alert('Solo puede agregar ' + disponibles + ' foto(s) más (máximo 4 en total). Se agregarán las primeras ' + disponibles + '.');
+    alert('Solo puede agregar ' + disponibles + ' foto(s) más (máximo 4 en total).');
   }
 
   const MAX_BYTES = 2 * 1024 * 1024;
@@ -758,22 +757,12 @@ function validarYPrevisualizarFotos(input) {
 
   for (let i = 0; i < limite; i++) {
     const file = files[i];
-    if (!file.type.startsWith('image/')) {
-      alert('No es imagen: ' + file.name);
-      continue;
-    }
-    if (file.size > MAX_BYTES) {
-      alert('"' + file.name + '" supera los 2 MB.');
-      continue;
-    }
+    if (!file.type.startsWith('image/')) { alert('No es imagen: ' + file.name); continue; }
+    if (file.size > MAX_BYTES) { alert('"' + file.name + '" supera los 2 MB.'); continue; }
     const reader = new FileReader();
     reader.onload = (function (fname) {
       return function (ev) {
-        fotosBase64Cargadas.push({
-          data: ev.target.result,
-          name: fname,
-          origen: 'archivo'
-        });
+        fotosBase64Cargadas.push({ data: ev.target.result, name: fname, origen: 'archivo' });
         actualizarPreviewFotos();
       };
     })(file.name);
@@ -795,11 +784,7 @@ async function abrirCamara() {
     return;
   }
   if (!soportaCamara()) {
-    alert('Este navegador no soporta el acceso a la cámara.\n\n' +
-          'Sugerencias:\n' +
-          '• Use Chrome, Edge, Safari o Firefox actualizado\n' +
-          '• Asegúrese de estar en HTTPS (GitHub Pages lo cumple)\n' +
-          '• En iOS use Safari');
+    alert('Este navegador no soporta el acceso a la cámara.\n\nUse Chrome, Edge, Safari o Firefox actualizado.');
     return;
   }
   bsModalCamara.show();
@@ -815,10 +800,12 @@ async function abrirCamara() {
   await iniciarCamara();
 
   if (camaraActiva) {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const camaras = devices.filter(d => d.kind === 'videoinput');
-    if (camaras.length > 1) btnAlternar.classList.remove('d-none');
-    else btnAlternar.classList.add('d-none');
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const camaras = devices.filter(d => d.kind === 'videoinput');
+      if (camaras.length > 1) btnAlternar.classList.remove('d-none');
+      else btnAlternar.classList.add('d-none');
+    } catch (e) {}
   }
   document.getElementById('fotosCapturadasContador').textContent = fotosBase64Cargadas.length;
 }
@@ -861,13 +848,11 @@ function mostrarErrorCamara(err) {
   let msg = 'Verifique los permisos de cámara en su navegador.';
   if (err) {
     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-      msg = 'El usuario denegó el permiso de cámara. Habilítelo en la barra de direcciones (candado) y vuelva a intentarlo.';
+      msg = 'El usuario denegó el permiso de cámara. Habilítelo en la barra de direcciones (candado).';
     } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
       msg = 'No se encontró ninguna cámara en este dispositivo.';
     } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
       msg = 'La cámara está siendo usada por otra aplicación.';
-    } else if (err.name === 'OverconstrainedError') {
-      msg = 'Las restricciones solicitadas no coinciden con ninguna cámara disponible.';
     } else if (err.message) {
       msg = err.message;
     }
@@ -906,14 +891,10 @@ function capturarFoto() {
 
   const pesoAprox = (dataUrl.length * 0.75) / 1024 / 1024;
   if (pesoAprox > 2.5) {
-    alert('La foto pesa ' + pesoAprox.toFixed(2) + ' MB, mayor al límite de 2 MB. Acérquese al equipo.');
+    alert('La foto pesa ' + pesoAprox.toFixed(2) + ' MB, mayor al límite de 2 MB.');
     return;
   }
-  fotosBase64Cargadas.push({
-    data: dataUrl,
-    name: 'camara_' + Date.now() + '.jpg',
-    origen: 'camara'
-  });
+  fotosBase64Cargadas.push({ data: dataUrl, name: 'camara_' + Date.now() + '.jpg', origen: 'camara' });
   actualizarPreviewFotos();
 
   const container = document.getElementById('camaraContainer');
@@ -1224,7 +1205,7 @@ function renderizarTablaRegistros(res) {
     if (reg.carpetaUrl) {
       btnCarpeta = '<button class="btn btn-sm btn-drive" ' +
         'onclick="abrirCarpetaDrive(decodeURIComponent(\'' + encodeURIComponent(reg.carpetaUrl) + '\'))" ' +
-        'title="Abrir carpeta de este registro en Google Drive">' +
+        'title="Abrir carpeta de Drive">' +
         '<i class="fa-brands fa-google-drive"></i></button>';
     }
 
@@ -1290,7 +1271,9 @@ function editarRegistro(id) {
   document.getElementById('modalRegistroLabel').innerHTML =
     '<i class="fa-solid fa-pen-to-square me-2"></i>Editar Registro';
   document.getElementById('formDueno').value = reg.dueno || '';
+
   poblarInputTelefono(reg.telefono);
+
   document.getElementById('formEstudiante').value = reg.estudiante || '';
   document.getElementById('formUsuario').value = reg.usuario || '';
   document.getElementById('formFechaIngreso').value = normalizarFecha(reg.fechaIngreso);
@@ -1370,9 +1353,7 @@ function generarPDF(tipo) {
   if (!reg) { alert('Seleccione un registro.'); return; }
 
   const esEntrada = tipo === 'entrada';
-  const titulo = esEntrada
-    ? 'COMPROBANTE DE INGRESO DE EQUIPO'
-    : 'COMPROBANTE DE EGRESO / ENTREGA DE EQUIPO';
+  const titulo = esEntrada ? 'COMPROBANTE DE INGRESO DE EQUIPO' : 'COMPROBANTE DE EGRESO / ENTREGA DE EQUIPO';
   const fecha = new Date().toLocaleDateString('es-HN', { year: 'numeric', month: 'long', day: 'numeric' });
 
   const bloqueEntrada = `
@@ -1392,8 +1373,7 @@ function generarPDF(tipo) {
 
   const bloqueCarpeta = reg.carpetaUrl
     ? `<tr><td class="lbl">Carpeta de fotos:</td><td style="word-break:break-all;font-size:11px">
-        <a href="${escapeHtml(reg.carpetaUrl)}">${escapeHtml(reg.carpetaUrl)}</a></td></tr>`
-    : '';
+        <a href="${escapeHtml(reg.carpetaUrl)}">${escapeHtml(reg.carpetaUrl)}</a></td></tr>` : '';
 
   const logo = 'https://placehold.co/120x120/1A73E8/FFFFFF?text=ITH+JM';
   const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${titulo}</title>
@@ -1439,9 +1419,7 @@ tr.total{background:#f1f7fe;font-size:15px}
 </table></div>
 <div class="seccion"><h3>Observaciones</h3>
 <p style="font-size:12px;color:#555">
-${esEntrada
-  ? 'El equipo descrito ha sido recibido en el Taller de Electrónica ITH JM para su diagnóstico y posterior reparación.'
-  : 'El equipo descrito ha sido entregado al cliente en las condiciones indicadas en este documento.'}
+${esEntrada ? 'El equipo descrito ha sido recibido en el Taller de Electrónica ITH JM para su diagnóstico y posterior reparación.' : 'El equipo descrito ha sido entregado al cliente en las condiciones indicadas en este documento.'}
 </p></div>
 <div class="footer">
   <div class="firma">Firma del Docente/Técnico</div>
@@ -1472,9 +1450,7 @@ function notificarCliente(canal) {
     const arr = String(reg.fotos).split(',').filter(u => u.trim() !== '');
     if (arr.length > 0) {
       fotosBloque = '\n\nFotos del equipo en Google Drive:\n';
-      if (reg.carpetaUrl) {
-        fotosBloque += 'Carpeta completa: ' + reg.carpetaUrl + '\n';
-      }
+      if (reg.carpetaUrl) fotosBloque += 'Carpeta completa: ' + reg.carpetaUrl + '\n';
       arr.forEach(function (url, i) {
         fotosBloque += 'Foto ' + (i + 1) + ': ' + convertirUrlDriveAView(url.trim()) + '\n';
       });
@@ -1515,9 +1491,8 @@ function notificarCliente(canal) {
   const msgEnc = encodeURIComponent(msg);
   const a = document.createElement('a');
   a.style.display = 'none';
-  if (canal === 'sms') {
-    a.href = 'sms:' + telInternacional + '?body=' + msgEnc;
-  } else if (canal === 'wsp') {
+  if (canal === 'sms') a.href = 'sms:' + telInternacional + '?body=' + msgEnc;
+  else if (canal === 'wsp') {
     a.href = 'https://wa.me/' + HN_CODIGO_PAIS + tel8 + '?text=' + msgEnc;
     a.target = '_blank'; a.rel = 'noopener';
   }
@@ -1554,12 +1529,8 @@ async function guardarNuevaContrasena(e) {
     passNueva: nueva
   });
 
-  if (res && res.exito) {
-    alert(res.mensaje || 'Actualizada.');
-    bsModalCambiarPass.hide();
-  } else {
-    error(res && res.mensaje ? res.mensaje : 'Error.');
-  }
+  if (res && res.exito) { alert(res.mensaje || 'Actualizada.'); bsModalCambiarPass.hide(); }
+  else error(res && res.mensaje ? res.mensaje : 'Error.');
 }
 
 /* ============================================================
@@ -1592,7 +1563,7 @@ function exportarCSV() {
 }
 
 /* ============================================================
-   USUARIOS (solo Administrador Principal)
+   USUARIOS
    ============================================================ */
 function abrirModalUsuarios() {
   if (!usuarioActual || usuarioActual.rol !== 'Administrador Principal') {
