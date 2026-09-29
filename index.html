@@ -68,72 +68,17 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 #camaraError{padding:2rem;text-align:center;color:#fff}
 .foto-counter{background:#e8f0fe;color:var(--primary-blue);padding:3px 10px;border-radius:20px;font-size:.78rem;font-weight:600;display:inline-block;margin-left:8px}
 
-/* ============================================================
-   FOOTER CON LOGO - Ricardo Cruz Docente Innovador
-   ============================================================ */
-.app-footer{
-  margin-top:3rem;
-  padding:1.75rem 1rem 1.5rem;
-  border-top:1px solid #e8eaed;
-  background:linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
-  text-align:center;
-}
-.footer-brand{
-  display:inline-flex;
-  align-items:center;
-  gap:12px;
-  text-decoration:none;
-  color:inherit;
-  transition:transform .2s;
-}
+/* Footer con logo */
+.app-footer{margin-top:3rem;padding:1.75rem 1rem 1.5rem;border-top:1px solid #e8eaed;background:linear-gradient(180deg,#fff 0%,#fafbfc 100%);text-align:center}
+.footer-brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:inherit;transition:transform .2s}
 .footer-brand:hover{transform:scale(1.03)}
-.footer-brand-icon{
-  width:38px;
-  height:38px;
-  flex-shrink:0;
-}
-.footer-brand-text{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  line-height:1;
-}
-.footer-brand-name{
-  font-family:'Poppins','Roboto',sans-serif;
-  font-size:22px;
-  font-weight:800;
-  color:#0F1B3D;
-  letter-spacing:-0.5px;
-  line-height:1.05;
-  margin:0;
-}
-.footer-brand-underline{
-  height:3px;
-  background:#FFB800;
-  width:100%;
-  margin:3px 0 4px 0;
-  border-radius:2px;
-}
-.footer-brand-tagline{
-  font-family:'Poppins','Roboto',sans-serif;
-  font-size:9.5px;
-  font-weight:600;
-  color:#0F1B3D;
-  letter-spacing:2px;
-  margin:0;
-  text-transform:uppercase;
-}
-.footer-tagline{
-  font-size:.72rem;
-  color:#80868b;
-  margin-top:.75rem;
-  font-style:italic;
-}
-@media (max-width:400px){
-  .footer-brand-name{font-size:19px}
-  .footer-brand-tagline{font-size:8.5px;letter-spacing:1.5px}
-  .footer-brand-icon{width:32px;height:32px}
-}
+.footer-brand-icon{width:38px;height:38px;flex-shrink:0}
+.footer-brand-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.footer-brand-name{font-family:'Poppins','Roboto',sans-serif;font-size:22px;font-weight:800;color:#0F1B3D;letter-spacing:-0.5px;line-height:1.05;margin:0}
+.footer-brand-underline{height:3px;background:#FFB800;width:100%;margin:3px 0 4px 0;border-radius:2px}
+.footer-brand-tagline{font-family:'Poppins','Roboto',sans-serif;font-size:9.5px;font-weight:600;color:#0F1B3D;letter-spacing:2px;margin:0;text-transform:uppercase}
+.footer-tagline{font-size:.72rem;color:#80868b;margin-top:.75rem;font-style:italic}
+@media (max-width:400px){.footer-brand-name{font-size:19px}.footer-brand-tagline{font-size:8.5px;letter-spacing:1.5px}.footer-brand-icon{width:32px;height:32px}}
 </style>
 </head>
 <body>
@@ -175,6 +120,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 
 <div class="container-fluid px-4">
 
+  <!-- LOGIN -->
   <section id="secLogin" class="row justify-content-center py-5">
     <div class="col-12 col-md-5 col-lg-4">
       <div class="card card-custom p-4 shadow-sm">
@@ -204,6 +150,7 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
     </div>
   </section>
 
+  <!-- DASHBOARD -->
   <section id="secDashboard" class="d-none">
     <div class="card card-custom p-3 mb-4 bg-light">
       <div class="row g-3 align-items-center">
@@ -252,24 +199,16 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
   </section>
 </div>
 
-<!-- ============================================
-     FOOTER CON LOGO PERSONALIZADO
-     ============================================ -->
+<!-- FOOTER CON LOGO -->
 <footer class="app-footer">
   <a class="footer-brand" href="#" onclick="return false;" aria-label="Ricardo Cruz - Docente Innovador">
-    <!-- Icono bombilla (recreado con SVG para maxima nitidez) -->
     <svg class="footer-brand-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- Bulbo principal -->
-      <path d="M20 4 C 11 4, 5 10, 5 19 C 5 24.5, 8 28.5, 12 31 L 12 33 C 12 34.5, 13 35, 14 35 L 26 35 C 27 35, 28 34.5, 28 33 L 28 31 C 32 28.5, 35 24.5, 35 19 C 35 10, 29 4, 20 4 Z"
-            fill="none" stroke="#FFB800" stroke-width="3.2" stroke-linejoin="round"/>
-      <!-- Filamento en forma de T invertida -->
+      <path d="M20 4 C 11 4, 5 10, 5 19 C 5 24.5, 8 28.5, 12 31 L 12 33 C 12 34.5, 13 35, 14 35 L 26 35 C 27 35, 28 34.5, 28 33 L 28 31 C 32 28.5, 35 24.5, 35 19 C 35 10, 29 4, 20 4 Z" fill="none" stroke="#FFB800" stroke-width="3.2" stroke-linejoin="round"/>
       <path d="M17 32 L17 20 L23 20 L23 32" fill="none" stroke="#FFB800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       <circle cx="20" cy="17" r="1.5" fill="#FFB800"/>
-      <!-- Base con lineas horizontales -->
       <line x1="15" y1="35.5" x2="25" y2="35.5" stroke="#FFB800" stroke-width="2.8" stroke-linecap="round"/>
       <line x1="16" y1="38" x2="24" y2="38" stroke="#FFB800" stroke-width="2.8" stroke-linecap="round"/>
     </svg>
-
     <div class="footer-brand-text">
       <p class="footer-brand-name">Ricardo Cruz</p>
       <div class="footer-brand-underline"></div>
@@ -608,8 +547,14 @@ body{background:#fff;font-family:'Roboto',sans-serif;color:var(--text-color);min
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbwrL9YNarMAV3B4ibRgdQmU6GNAqgBRzGDZC4EhOe5-hmWMB2MkEeXhh3EDZoo3PZtcsA/exec';
+/* ============================================================
+   CONFIGURACION - URL DE APPS SCRIPT (ACTUALIZADA)
+   ============================================================ */
+const API_URL = 'https://script.google.com/macros/s/AKfycbw6wrSKEw4oVCdUMc1jaJN7h9JqPLfbrBW1M9uk2XfxFg86vhXAK3_Pi25bzjkielU7gg/exec';
 
+/* ============================================================
+   ESTADO GLOBAL
+   ============================================================ */
 let usuarioActual = null;
 let anioSeleccionado = new Date().getFullYear();
 let listaRegistrosActuales = [];
@@ -622,11 +567,17 @@ let camaraActiva = false;
 
 let bsModalRegistro, bsModalUsuarios, bsModalFotos, bsModalInforme, bsModalCambiarPass, bsModalCamara;
 
+/* ============================================================
+   CONSTANTES DE HONDURAS
+   ============================================================ */
 const HN_CODIGO_PAIS = '504';
 const HN_PREFIJO_MOSTRAR = '+504';
 const HN_REGEX_8_DIGITOS = /^\d{8}$/;
 const HN_PREFIJOS_CELULAR = /^[389]/;
 
+/* ============================================================
+   API HELPER
+   ============================================================ */
 async function llamarAPI(accion, params) {
   params = params || {};
   try {
@@ -644,6 +595,9 @@ async function llamarAPI(accion, params) {
   }
 }
 
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
 function log() { try { console.log.apply(console, ['[ITH-JM]'].concat([].slice.call(arguments))); } catch (e) {} }
 function logError() { try { console.error.apply(console, ['[ITH-JM ERROR]'].concat([].slice.call(arguments))); } catch (e) {} }
 
@@ -679,16 +633,24 @@ function convertirUrlDriveAView(url) {
   return url;
 }
 
+/* ============================================================
+   TELEFONO HONDUREÑO
+   ============================================================ */
 function formatearTelefonoHN(input) {
   let v = input.value.replace(/\D/g, '').substring(0, 8);
   if (v.length > 4) v = v.substring(0, 4) + '-' + v.substring(4);
   input.value = v;
 }
-function extraer8Digitos(tel) { return String(tel || '').replace(/\D/g, '').slice(-8); }
+
+function extraer8Digitos(tel) {
+  return String(tel || '').replace(/\D/g, '').slice(-8);
+}
+
 function esTelefonoHNValido(tel) {
   const d = extraer8Digitos(tel);
   return HN_REGEX_8_DIGITOS.test(d) && HN_PREFIJOS_CELULAR.test(d);
 }
+
 function formatearTelefonoHNCompleto(tel) {
   const d = extraer8Digitos(tel);
   if (d.length !== 8) return '';
@@ -708,6 +670,9 @@ function poblarInputTelefono(telGuardado) {
   }
 }
 
+/* ============================================================
+   TOGGLE APARATO "OTRO"
+   ============================================================ */
 function toggleOtroAparato() {
   const select = document.getElementById('formTipoAparato');
   const container = document.getElementById('otroAparatoContainer');
@@ -723,6 +688,9 @@ function toggleOtroAparato() {
   }
 }
 
+/* ============================================================
+   PREVISUALIZACION DE FOTOS
+   ============================================================ */
 function actualizarPreviewFotos() {
   const cont = document.getElementById('previewFotosContainer');
   cont.innerHTML = '';
@@ -787,7 +755,12 @@ function validarYPrevisualizarFotos(input) {
   setTimeout(function () { input.value = ''; }, 300);
 }
 
-function soportaCamara() { return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia); }
+/* ============================================================
+   CAMARA
+   ============================================================ */
+function soportaCamara() {
+  return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
 
 async function abrirCamara() {
   if (fotosBase64Cargadas.length >= 4) { alert('Ya alcanzó el máximo de 4 fotografías.'); return; }
@@ -894,7 +867,7 @@ function capturarFoto() {
   setTimeout(function () { flash.style.opacity = '0'; }, 30);
   setTimeout(function () { if (flash.parentNode) flash.parentNode.removeChild(flash); }, 350);
   if (fotosBase64Cargadas.length >= 4) {
-    setTimeout(function () { alert('Ha alcanzado el máximo de 4 fotografías.'); cerrarCamara(); }, 400);
+    setTimeout(function () { alert('Máximo de 4 fotografías alcanzado.'); cerrarCamara(); }, 400);
   }
 }
 
@@ -906,6 +879,9 @@ function cerrarCamara() {
   try { bsModalCamara.hide(); } catch (e) {}
 }
 
+/* ============================================================
+   INICIALIZACION
+   ============================================================ */
 window.addEventListener('load', function () {
   try {
     bsModalRegistro    = new bootstrap.Modal(document.getElementById('modalRegistro'), { backdrop: 'static', keyboard: false });
@@ -958,6 +934,9 @@ function mostrarInterfazPrincipal() {
   cargarRegistrosPorAnio(anioSeleccionado);
 }
 
+/* ============================================================
+   LOGIN
+   ============================================================ */
 async function procesarLogin(e) {
   e.preventDefault();
   const user = document.getElementById('loginUser').value.trim();
@@ -988,6 +967,9 @@ function cerrarSesion() {
   mostrarLogin();
 }
 
+/* ============================================================
+   PESTAÑAS DE AÑOS
+   ============================================================ */
 function generarPestanasAnios() {
   const cont = document.getElementById('yearTabs');
   cont.innerHTML = '';
@@ -1008,6 +990,9 @@ function generarPestanasAnios() {
   }
 }
 
+/* ============================================================
+   MODAL REGISTRO
+   ============================================================ */
 function abrirModalRegistro() {
   document.getElementById('formEquipo').reset();
   document.getElementById('equipoId').value = '';
@@ -1026,6 +1011,10 @@ function abrirModalRegistro() {
   bsModalRegistro.show();
 }
 
+/* ============================================================
+   VALIDACION DEL FORMULARIO
+   Envia telefonoDigitos ademas del telefono formateado
+   ============================================================ */
 function validarFormularioEquipo() {
   const errores = [];
   const g = id => document.getElementById(id).value.trim();
@@ -1037,29 +1026,38 @@ function validarFormularioEquipo() {
   const estudiante = g('formEstudiante');
   const tecnico = g('formTecnico');
   const fallaInicial = g('formFallaInicial');
+
   let tipoAparato = tipoAparatoSel;
   if (tipoAparatoSel === 'Otro') {
     if (!otroAparato) errores.push('• Especifique qué tipo de aparato es');
     else tipoAparato = otroAparato;
   }
+
   if (!dueno) errores.push('• Nombre del dueño');
   if (!telefonoRaw) errores.push('• Teléfono celular');
-  else if (!esTelefonoHNValido(telefonoRaw)) errores.push('• Teléfono hondureño inválido');
+  else if (!esTelefonoHNValido(telefonoRaw)) errores.push('• Teléfono hondureño inválido (8 dígitos, inicia con 3, 8 o 9)');
   if (!fechaIngreso) errores.push('• Fecha de ingreso');
   if (!tipoAparatoSel) errores.push('• Tipo de aparato');
   if (!estudiante) errores.push('• Estudiante asignado');
   if (!tecnico) errores.push('• Docente/Técnico responsable');
   if (!fallaInicial) errores.push('• Falla inicial');
+
   const id = document.getElementById('equipoId').value;
   if (!id && fotosBase64Cargadas.length === 0) errores.push('• Al menos 1 fotografía');
+
   if (errores.length > 0) {
     alert('Complete los siguientes campos:\n\n' + errores.join('\n'));
     return null;
   }
+
+  // === CLAVE: enviar telefonoDigitos ===
+  const telefonoDigitos = extraer8Digitos(telefonoRaw);
+
   return {
     usuario: document.getElementById('formUsuario').value,
     dueno: dueno,
     telefono: formatearTelefonoHNCompleto(telefonoRaw),
+    telefonoDigitos: telefonoDigitos,
     estudiante: estudiante,
     fechaIngreso: fechaIngreso,
     tipoAparato: tipoAparato,
@@ -1072,12 +1070,17 @@ function validarFormularioEquipo() {
   };
 }
 
+/* ============================================================
+   GUARDAR REGISTRO
+   ============================================================ */
 async function guardarFormularioEquipo() {
   if (guardandoRegistro) return;
   const datos = validarFormularioEquipo();
   if (!datos) return;
 
-  log('=== GUARDANDO. Telefono a enviar:', datos.telefono);
+  log('=== GUARDANDO ===');
+  log('Telefono:', datos.telefono);
+  log('Telefono digitos:', datos.telefonoDigitos);
 
   const id = document.getElementById('equipoId').value;
   const btn = document.getElementById('btnGuardarEquipo');
@@ -1123,6 +1126,9 @@ async function guardarFormularioEquipo() {
   }, 350);
 }
 
+/* ============================================================
+   CARGA DE REGISTROS
+   ============================================================ */
 async function cargarRegistrosPorAnio(anio) {
   const sp = document.getElementById('loadingSpinner');
   sp.style.display = 'block';
@@ -1248,6 +1254,9 @@ async function eliminarRegistroConfirm(id) {
   cargarRegistrosPorAnio(anioSeleccionado);
 }
 
+/* ============================================================
+   INFORME PDF / SMS / WSP
+   ============================================================ */
 function abrirModalInforme(id) {
   const reg = listaRegistrosActuales.find(r => String(r.id) === String(id));
   if (!reg) return;
@@ -1403,6 +1412,9 @@ function notificarCliente(canal) {
   setTimeout(function () { document.body.removeChild(a); }, 500);
 }
 
+/* ============================================================
+   CAMBIO DE CONTRASEÑA
+   ============================================================ */
 function abrirModalCambiarPass() {
   document.getElementById('formCambiarPass').reset();
   document.getElementById('cpAlert').classList.add('d-none');
@@ -1430,6 +1442,9 @@ async function guardarNuevaContrasena(e) {
   else error(res && res.mensaje ? res.mensaje : 'Error.');
 }
 
+/* ============================================================
+   BUSQUEDA / EXPORTAR
+   ============================================================ */
 function filtrarTabla() {
   const q = document.getElementById('inputBuscar').value.toLowerCase();
   document.querySelectorAll('#tbodyRegistros tr').forEach(function (f) {
@@ -1456,6 +1471,9 @@ function exportarCSV() {
   document.body.appendChild(link); link.click(); document.body.removeChild(link);
 }
 
+/* ============================================================
+   USUARIOS
+   ============================================================ */
 function abrirModalUsuarios() {
   if (!usuarioActual || usuarioActual.rol !== 'Administrador Principal') {
     alert('Solo el Administrador Principal puede gestionar usuarios.');
